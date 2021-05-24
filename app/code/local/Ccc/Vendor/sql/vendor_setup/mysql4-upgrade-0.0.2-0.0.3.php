@@ -54,6 +54,11 @@ $table = $installer->getConnection()
     ), 'Type ID')
     ->addColumn('sku', Varien_Db_Ddl_Table::TYPE_TEXT, 64, array(
     ), 'SKU')
+    ->addColumn('store_id', Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array(
+        'unsigned' => true,
+        'nullable' => false,
+        'default' => '0',
+    ), 'Store ID')
     ->addColumn('has_options', Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array(
         'nullable' => false,
         'default' => '0',

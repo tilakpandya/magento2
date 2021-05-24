@@ -20,7 +20,7 @@ $table = $installer->getConnection()
     ), 'product Id')
     ->addColumn('catalog_product_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
         'unsigned' => true,
-        'nullable' => false,
+        'nullable' => true,
     ), 'catalog product Id')
     ->addColumn('request_type', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
         'unsigned' => true,
@@ -47,6 +47,7 @@ $table = $installer->getConnection()
         ),
         'vendor_id', $installer->getTable('vendor/vendor'), 'entity_id',
         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
+
     ->addForeignKey(
         $installer->getFkName(
             'vendor/product_request',
@@ -56,16 +57,9 @@ $table = $installer->getConnection()
         ),
         'product_id', $installer->getTable('vendor/product'), 'entity_id',
         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
-        ->addForeignKey(
-            $installer->getFkName(
-                'vendor/product_request',
-                'catalog_product_id',
-                'catalog/product',
-                'entity_id'
-            ),
-            'product_id', $installer->getTable('catalog/product'), 'entity_id',
-            Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
+
     ->setComment('vendor Product Request Backend Table');
+
 $installer->getConnection()->createTable($table);
 
 $installer->endSetup();
