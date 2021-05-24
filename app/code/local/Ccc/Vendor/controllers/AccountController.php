@@ -453,4 +453,3 @@ class Ccc_Vendor_AccountController extends Mage_Core_Controller_Front_Action
         $this->_redirect('*/*/edit');
     }
 }
-
