@@ -30,10 +30,9 @@
 			</tr>
 		<?php elseif($attribute->getFrontendInput() == 'price'): ?>
 			<tr>
-				<td><?php echo $attribute->getFrontendLabel(); if($attribute->getIsRequired()){echo ' *';}?></td>
+				<td><?php echo $attribute->getFrontendLabel(); ?></td>
 				<td>
-					<input class="productForm" type="price" id="<?php echo $attribute->getAttributeCode() ?>" name="<?php echo $attribute->getAttributeCode() ?>" value="<?php echo $product[$attribute->getAttributeCode()] ?>"
-					<?php if($attribute->getIsRequired()){echo 'required';} ?>>
+					<input class="productForm" type="price" id="<?php echo $attribute->getAttributeCode() ?>" name="<?php echo $attribute->getAttributeCode() ?>" value="<?php echo $product[$attribute->getAttributeCode()] ?>">
 				</td>
 			</tr>
 		<?php elseif($attribute->getFrontendInput() == 'boolean'): ?>

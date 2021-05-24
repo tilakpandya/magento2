@@ -64,6 +64,8 @@ class Ccc_Vendor_Model_Resource_Setup extends Mage_Eav_Model_Entity_Setup
                         'label' => 'Price',
                         'input' => 'price',
                         'backend' => 'catalog/product_attribute_backend_price',
+                        'frontend_class' => 'validate-zero-or-greater',
+                        'required' => true,
                         'sort_order' => 1,
                         'global' => Ccc_Vendor_Model_Resource_Eav_Attribute::SCOPE_WEBSITE,
                         'searchable' => true,

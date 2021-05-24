@@ -68,6 +68,7 @@ class Ccc_Vendor_ProductController extends Mage_Core_Controller_Front_Action
             }
             $productId = $this->getRequest()->getParam('id');
             $productData = $this->getRequest()->getPost();
+            
             $product = Mage::getSingleton('vendor/product');
             $sku = $this->getRequest()->getPost('sku');
             $skuflag = 1;
@@ -133,10 +134,8 @@ class Ccc_Vendor_ProductController extends Mage_Core_Controller_Front_Action
             }
             $this->_getSession()->addSuccess('Request send for this product.');
         } catch (Exception $th) {
-            echo "<pre>";
-            print_r($th);
-            die;
-            Mage::getSingleton('core/session')->addError($this->__('Error in processing'));
+            
+            Mage::getSingleton('core/session')->addError($this->__($th));
             $this->_redirect('*/*/');
             return;
         }

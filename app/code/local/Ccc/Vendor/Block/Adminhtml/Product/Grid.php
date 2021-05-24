@@ -24,11 +24,8 @@ class Ccc_Vendor_Block_Adminhtml_Product_Grid extends Mage_Adminhtml_Block_Widge
         $store = $this->_getStore();
 
         $collection = Mage::getModel('vendor/product')->getResourceCollection()
-            //->addAttributeToSelect('sku')
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('price')
-            //->addAttributeToSelect('status')
-            //->addAttributeToSelect('attribute_set_id')
             ->addAttributeToSelect('vendor_id'); 
 
         $adminStore = Mage_Core_Model_App::ADMIN_STORE_ID;
@@ -40,63 +37,19 @@ class Ccc_Vendor_Block_Adminhtml_Product_Grid extends Mage_Adminhtml_Block_Widge
             'inner'
         );
 
-        /* $collection->joinAttribute(
-            'name',
-            'vendor_product/name',
-            'entity_id',
-            null,
-            'inner',
-            $adminStore
-        );
-        $collection->joinAttribute(
-            'custom_name',
-            'vendor_product/name',
-            'entity_id',
-            null,
-            'inner',
-            $adminStore
-        );
-        $collection->joinAttribute(
-            'sku',
-            'vendor_product/sku',
-            'entity_id',
-            null,
-            'inner',
-            $adminStore
-        );
-        
-        $collection->joinAttribute(
-            'vendor_id',
-            'vendor_product/entity_type_id',
-            'entity_id',
-            null,
-            'inner',
-            $adminStore
-        );
-
         $collection->joinAttribute(
             'price',
             'vendor_product/price',
             'entity_id',
             null,
             'left',
-            $adminStore
         );
-
-        $collection->joinAttribute(
-            'status',
-            'vendor_product/status',
-            'entity_id',
-            null,
-            'inner',
-            $adminStore
-        ); */
-
+        
         $collection->getSelect()->join(
             array('vendor_product_request' => 'vendor_product_request'),
             'vendor_product_request.product_id = e.entity_id',
             array('vendor_product_request.request_type','vendor_product_request.approve_status')
-        )->where('vendor_product_request.approve_status = "Pending"');
+        );//->where('vendor_product_request.approve_status = "Pending" AND vendor_product_request.approve_status = "Approved" ');
 
         
 
@@ -107,6 +60,7 @@ class Ccc_Vendor_Block_Adminhtml_Product_Grid extends Mage_Adminhtml_Block_Widge
 
     protected function _prepareColumns()
     {
+        $request = Mage::getModel('vendor/product_request')->getResourceCollection()->getData();
         $this->addColumn('entity_id',
             array(
                 'header' => Mage::helper('vendor')->__('id'),
@@ -149,43 +103,45 @@ class Ccc_Vendor_Block_Adminhtml_Product_Grid extends Mage_Adminhtml_Block_Widge
                 'type' => 'text'
         ));
 
-        $this->addColumn('action1',
-            array(
-                'header'   => Mage::helper('vendor')->__('Approve Request'),
-                'width'    => '50px',
-                'type'     => 'action',
-                'getter'   => 'getId',
-                'actions'  => array(
-                    array(
-                        'caption'=>$this->__('Approve'),
-                        'url' => array(
-                            'base' => '*/*/newApprove', 
-                        ),
-                        'field' => 'id',
-                    ),
-                ),
-                'filter'    => false,
-                'sortable'  =>false,
-        )); 
         
-        $this->addColumn('action2',
-            array(
-                'header'   => Mage::helper('vendor')->__('Reject Request'),
-                'width'    => '50px',
-                'type'     => 'action',
-                'getter'   => 'getId',
-                'actions'  => array(
-                    array(
-                        'caption'=>$this->__('Reject'),
-                        'url' => array(
-                            'base' => '*/*/reject', 
+            $this->addColumn('action1',
+                array(
+                    'header'   => Mage::helper('vendor')->__('Approve Request'),
+                    'width'    => '50px',
+                    'type'     => 'action',
+                    'getter'   => 'getId',
+                    'actions'  => array(
+                        array(
+                            'caption'=>$this->__('Approve'),
+                            'url' => array(
+                                'base' => '*/*/newApprove', 
+                            ),
+                            'field' => 'id',
                         ),
-                        'field' => 'id',
                     ),
-                ),
-                'filter'    => false,
-                'sortable'  =>false,
-        )); 
+                    'filter'    => false,
+                    'sortable'  =>false,
+            )); 
+            
+            $this->addColumn('action2',
+                array(
+                    'header'   => Mage::helper('vendor')->__('Reject Request'),
+                    'width'    => '50px',
+                    'type'     => 'action',
+                    'getter'   => 'getId',
+                    'actions'  => array(
+                        array(
+                            'caption'=>$this->__('Reject'),
+                            'url' => array(
+                                'base' => '*/*/reject', 
+                            ),
+                            'field' => 'id',
+                        ),
+                    ),
+                    'filter'    => false,
+                    'sortable'  =>false,
+            )); 
+            
         parent::_prepareColumns();
         return $this;
     }
