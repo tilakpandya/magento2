@@ -1,0 +1,20 @@
+a:5:{i:0;s:811:"Error in file: "C:\xampp\htdocs\magento\app\code\local\Ccc\Order\sql\order_setup\mysql4-upgrade-0.0.2-0.0.3.php" - SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'order_address' already exists, query was: CREATE TABLE `order_address` (
+  `order_address_id` int NOT NULL auto_increment COMMENT 'Order_address_id' ,
+  `order_id` int NOT NULL COMMENT 'Order_id' ,
+  `address_id` int NULL COMMENT 'Address_id' ,
+  `address_type` text NOT NULL COMMENT 'Address_type' ,
+  `address` text NOT NULL COMMENT 'Address' ,
+  `city` text NOT NULL COMMENT 'City' ,
+  `state` text NOT NULL COMMENT 'State' ,
+  `country` text NOT NULL COMMENT 'Country' ,
+  `zipcode` text NOT NULL COMMENT 'Zipcode' ,
+  PRIMARY KEY (`order_address_id`)
+) COMMENT='order_address' ENGINE=INNODB charset=utf8 COLLATE=utf8_general_ci";i:1;s:954:"#0 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\Resource\Setup.php(644): Mage::exception('Mage_Core', 'Error in file: ...')
+#1 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\Resource\Setup.php(437): Mage_Core_Model_Resource_Setup->_modifyResourceDb('upgrade', '0.0.2', '0.0.3')
+#2 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\Resource\Setup.php(320): Mage_Core_Model_Resource_Setup->_upgradeResourceDb('0.0.2', '0.0.3')
+#3 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\Resource\Setup.php(235): Mage_Core_Model_Resource_Setup->applyUpdates()
+#4 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\App.php(428): Mage_Core_Model_Resource_Setup::applyAllUpdates()
+#5 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\App.php(354): Mage_Core_Model_App->_initModules()
+#6 C:\xampp\htdocs\magento\app\Mage.php(683): Mage_Core_Model_App->run(Array)
+#7 C:\xampp\htdocs\magento\index.php(83): Mage::run('', 'store')
+#8 {main}";s:3:"url";s:84:"/magento/index.php/order/Adminhtml_Order/index/key/fd15bcdb43e975b9704cd4247b91e7b0/";s:11:"script_name";s:18:"/magento/index.php";s:4:"skin";s:7:"default";}

@@ -1,0 +1,22 @@
+a:5:{i:0;s:1259:"Error in file: "C:\xampp\htdocs\magento\app\code\local\Ccc\Order\sql\order_setup\mysql4-upgrade-0.0.2-0.0.3.php" - SQLSTATE[HY000]: General error: 1005 Can't create table `magento_tilak`.`order_item` (errno: 121 "Duplicate key on write or update"), query was: CREATE TABLE `order_item` (
+  `order_item_id` smallint UNSIGNED NOT NULL auto_increment COMMENT 'Order_item_id' ,
+  `order_id` smallint unsigned NOT NULL COMMENT 'Order_id' ,
+  `product_id` int unsigned NOT NULL COMMENT 'Product_id' ,
+  `product_name` int NOT NULL COMMENT 'Product_name' ,
+  `quantity` int NOT NULL COMMENT 'Quantity' ,
+  `base_price` decimal(10,0) NOT NULL COMMENT 'Base_price' ,
+  `price` decimal(10,0) NOT NULL COMMENT 'Price' ,
+  `discount` decimal(10,0) NOT NULL COMMENT 'Discount' ,
+  `created_at` datetime NOT NULL COMMENT 'Created_at' ,
+  PRIMARY KEY (`order_item_id`),
+  CONSTRAINT `FK_CART_ITEM_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_CART_ITEM_ORDER_ID_ORDER_ORDER_ID` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) COMMENT='order_item' ENGINE=INNODB charset=utf8 COLLATE=utf8_general_ci";i:1;s:954:"#0 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\Resource\Setup.php(644): Mage::exception('Mage_Core', 'Error in file: ...')
+#1 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\Resource\Setup.php(437): Mage_Core_Model_Resource_Setup->_modifyResourceDb('upgrade', '0.0.2', '0.0.3')
+#2 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\Resource\Setup.php(320): Mage_Core_Model_Resource_Setup->_upgradeResourceDb('0.0.2', '0.0.3')
+#3 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\Resource\Setup.php(235): Mage_Core_Model_Resource_Setup->applyUpdates()
+#4 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\App.php(428): Mage_Core_Model_Resource_Setup::applyAllUpdates()
+#5 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\App.php(354): Mage_Core_Model_App->_initModules()
+#6 C:\xampp\htdocs\magento\app\Mage.php(683): Mage_Core_Model_App->run(Array)
+#7 C:\xampp\htdocs\magento\index.php(83): Mage::run('', 'store')
+#8 {main}";s:3:"url";s:84:"/magento/index.php/order/Adminhtml_Order/index/key/fd15bcdb43e975b9704cd4247b91e7b0/";s:11:"script_name";s:18:"/magento/index.php";s:4:"skin";s:7:"default";}
