@@ -1,6 +1,7 @@
 <?php
 class Ccc_Vendor_AccountController extends Mage_Core_Controller_Front_Action
 {
+    //index action
     public function indexAction()
     {
         $this->loadLayout();
