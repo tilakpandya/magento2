@@ -28,7 +28,12 @@
             <td><?php echo $product['custom_name']; ?>&nbsp;</td>
             <!-- <td><?php //echo $product['type_id']; ?>&nbsp;</td> -->
             <td><?php echo $product['sku']; ?>&nbsp;</td>
-            <td><?php echo $product['price']; ?>&nbsp;</td>
+            <?php if (!$product['price']):?>
+                <td>--</td>
+            <?php endif;?>     
+            <?php if ($product['price']):?>
+                <td><?php echo $product['price']; ?></td>
+            <?php endif;?>
             <td><?php echo $product['request_type']; ?>&nbsp;</td>
             <?php if ($product['approve_status'] == "Pending"): ?>
                 <td> <p style="color: blue"><?php echo $product['approve_status']; ?></p>&nbsp;</td>
