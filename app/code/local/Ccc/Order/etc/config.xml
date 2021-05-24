@@ -22,25 +22,41 @@
     <models>
             <order>
                 <class>Ccc_Order_Model</class>
-                <!-- <resourceModel>order_resource</resourceModel> -->
+                <resourceModel>order_resource</resourceModel>
             </order>   
-           <!--  <order_resource>
+           <order_resource>
                 <class>Ccc_Order_Model_Resource</class>
                 <entities>
-                  <adgrid>
-                    <table>order_adgrid</table>
-                  </adgrid>                    
+                  <cart>
+                    <table>cart</table>
+                  </cart> 
+                  <order>
+                    <table>order</table>
+                  </order> 
+                   <!-- <cart_item>
+                    <table>cart_item</table>
+                  </cart_item> 
+                  <cart_address>
+                    <table>cart_address</table>
+                  </cart_address>  
+                  
+                   <order_item>
+                    <table>order_item</table>
+                  </order_item> 
+                  <order_address>
+                    <table>order_address</table>
+                  </order_address> -->                   
                 </entities>
-            </order_resource> -->
+            </order_resource>
     </models>
 
-   <!--  <resources>
+   <resources>
 			 <order_setup>
 				 <setup>
 				    <module>Ccc_Order</module>
 				 </setup>
 			 </order_setup>
-		</resources> -->
+		</resources>
   </global>
 
 <admin>
