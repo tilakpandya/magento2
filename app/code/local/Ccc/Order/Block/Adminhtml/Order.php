@@ -13,6 +13,6 @@ class Ccc_Order_Block_Adminhtml_Order extends Mage_Adminhtml_Block_Widget_Grid_C
 
     public function getCreateUrl()
     {
-        return $this->getUrl('*/Adminhtml_order_create/start');
+        return $this->getUrl('*/Adminhtml_order/start');
     }
 }

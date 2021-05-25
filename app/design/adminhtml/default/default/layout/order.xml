@@ -5,4 +5,9 @@
             <block type="order/adminhtml_order" name="order.grid"/>
         </reference>
     </order_adminhtml_order_index>
+    <order_adminhtml_order_start>
+        <reference name="content">
+            <block type="order/adminhtml_cart" name="order.grid" template="order/adminhtml/cart.phtml"/>
+        </reference>
+    </order_adminhtml_order_start>
 </layout>
