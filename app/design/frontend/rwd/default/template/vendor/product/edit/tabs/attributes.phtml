@@ -78,7 +78,7 @@
 			<tr>
 				<td><?php echo $attribute->getFrontendLabel(); if($attribute->getIsRequired()){echo ' *';}?></td>
 				<td>
-					<input class="productForm" id="<?php echo $attribute->getAttributeCode() ?>" type="text" name="<?php echo $attribute->getAttributeCode() ?>" value="<?php echo $product[$attribute->getAttributeCode()] ?>"
+					<input type="number" min="0" class="productForm" id="<?php echo $attribute->getAttributeCode() ?>" type="text" name="<?php echo $attribute->getAttributeCode() ?>" value="<?php echo $product[$attribute->getAttributeCode()] ?>"
 					<?php if($attribute->getIsRequired()){echo 'required';} ?>>
 				</td>
 			</tr>

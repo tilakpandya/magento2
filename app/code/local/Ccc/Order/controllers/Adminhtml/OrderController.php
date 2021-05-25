@@ -28,7 +28,11 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
 
     public function selectCustomerAction()
     {
-        echo "Welcome";
+        $customerData = $this->getRequest()->getPost();
+        $cart = Mage::getModel("order/cart");
+        
+        echo "<pre>";
+        print_r($customerData);
         die;
     }
 }
