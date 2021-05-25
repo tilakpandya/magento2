@@ -32,7 +32,8 @@
 			<tr>
 				<td><?php echo $attribute->getFrontendLabel(); ?></td>
 				<td>
-					<input class="productForm" type="price" id="<?php echo $attribute->getAttributeCode() ?>" name="<?php echo $attribute->getAttributeCode() ?>" value="<?php echo $product[$attribute->getAttributeCode()] ?>">
+					<input class="productForm" type="number" id="<?php echo $attribute->getAttributeCode() ?>"
+					 name="<?php echo $attribute->getAttributeCode() ?>" value="<?php echo $product[$attribute->getAttributeCode()] ?>" min=0>
 				</td>
 			</tr>
 		<?php elseif($attribute->getFrontendInput() == 'boolean'): ?>

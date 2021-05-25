@@ -5,9 +5,6 @@
  ?>
 <form action="<?php echo $this->getUrl('*/adminhtml_order/test');?>" Method="POST">
     <?php echo $this->getBlockHtml('formkey');?>
-    <input type="text" name="cart">
-    <input type="submit" title="Save">
-
     <div class="entry-edit">
         <?php echo $this->getChildHtml('customer_list'); ?>
     </div>

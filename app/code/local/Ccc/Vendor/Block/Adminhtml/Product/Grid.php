@@ -148,14 +148,6 @@ class Ccc_Vendor_Block_Adminhtml_Product_Grid extends Mage_Adminhtml_Block_Widge
 
     public function getGridUrl()
     {
-        return $this->getUrl('*/*/grid', array('_current' => true));
-    }
-
-    public function getRowUrl($row)
-    {
-        return $this->getUrl('*/*/edit', array(
-            'store' => $this->getRequest()->getParam('store'),
-            'id'    => $row->getId())
-        );
+        return $this->getUrl('*/*/index', array('_current' => true));
     }
 }
