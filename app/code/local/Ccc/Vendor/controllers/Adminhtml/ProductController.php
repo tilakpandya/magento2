@@ -73,7 +73,6 @@ class Ccc_Vendor_Adminhtml_ProductController extends Mage_Adminhtml_Controller_A
         $this->loadLayout();
         
         $this->_setActiveMenu('vendor/vendor');
-        //$this->_addContent($this->getLayout()->createBlock('vendor/adminhtml_vendor_edit'));
         $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
 
         $this->renderLayout();
@@ -137,7 +136,7 @@ class Ccc_Vendor_Adminhtml_ProductController extends Mage_Adminhtml_Controller_A
                 return;
             }
             
-            if ($productRequestModel->getRequestType() == 'Delete') {
+            if ($productRequestModel->getRequestType() == 'Deleted') {
                 $this->_forward('delete');
                 return;
             }
