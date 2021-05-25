@@ -1,7 +1,7 @@
-<?php $customers = $this->getCustomers();
-      /*  echo "<pre>";
-       print_r($customers->getData()); 
-       die;  */
+<?php 
+ /* echo "<pre>";
+       print_r($this->getPayment()); 
+       die;  */ 
  ?>
 <form action="<?php echo $this->getUrl('*/adminhtml_order/test');?>" Method="POST">
     <?php echo $this->getBlockHtml('formkey');?>
@@ -9,50 +9,35 @@
     <input type="submit" title="Save">
 
     <div class="entry-edit">
-        <div class="entry-edit-head"><h4>Customer</h4></div>
-            <fieldset class="a-center bold">
-            <span class="nowrap" style="font-size:18px;">
-            <label for="cars">Choose a customer:</label>
-                <select name="customer_name" style="width:150px;height:30px">
-                <option value="">--Select--</option>  
-                    <?php foreach ($customers as $key => $value):?>
-                    <option value="<?= $value['entity_id']?>"><?= $value['firstName']?> <?= $value['lastName']?></option>  
-                     <?php endforeach; ?>  
-                </select>  
-                <br><br>
-                <input type="submit" title="Save Customer" style="width:100px;height:25px">
-            </span>
-        </fieldset>
+        <?php echo $this->getChildHtml('customer_list'); ?>
     </div>
 
     <div class="entry-edit">
-        <div class="entry-edit-head"><h4>Product</h4></div>
-            <fieldset class="a-center bold">
-            <span class="nowrap" style="font-size:18px;">
-                product   
-            </span>
-        </fieldset>
+        <?php echo $this->getChildHtml('product'); ?>
+        
     </div>
 
     <div class="entry-edit">
-        <div class="entry-edit-head"><h4>Cart</h4></div>
-            <fieldset class="a-center bold">
-            <span class="nowrap" style="font-size:18px;">
-                cart   
-            </span>
-        </fieldset>
+        <?php echo $this->getChildHtml('items'); ?>
     </div>
 
     <div class="entry-edit">
         <div class="entry-edit-head"><h4>customer Address</h4></div>
             <fieldset class="a-center bold">
-            <span class="nowrap" style="font-size:18px;">
-            <table width="100%" class="table-class">
+            <span class="nowrap">
+            <center>
+                <table width="60%" class="table-class">
                     <tr>
-                        <td>Shpping Add</td>
-                        <td>Billing Add</td>
+                        <th><h2>Shipping Address</h2></th>
+                        <th><h2>Billing Address</h2></th>
                     </tr>
-                </table>   
+                    <tr>
+                        <td><?php echo $this->getChildHtml('shipping_Address'); ?></td>
+                        <td><?php echo $this->getChildHtml('billing_Address'); ?></td>
+                    </tr>
+                </table> 
+            </center>    
+            <input type="submit" title="Save Product" style="width:100px;height:25px">           
             </span>
         </fieldset>
     </div>
@@ -63,8 +48,12 @@
             <span class="nowrap" style="font-size:18px;">
                 <table width="100%" class="table-class">
                     <tr>
-                        <td>Shpping Method</td>
-                        <td>Billing Method</td>
+                        <td>                            
+                            <?php echo $this->getChildHtml('shipping_method') ?>
+                        </td>
+                        <td>
+                            <?php echo $this->getChildHtml('billing_method') ?>
+                        </td>
                     </tr>
                 </table>  
             </span>
@@ -72,12 +61,7 @@
     </div>
 
     <div class="entry-edit">
-        <div class="entry-edit-head"><h4>Total Price</h4></div>
-            <fieldset class="a-center bold">
-            <span class="nowrap" style="font-size:18px;">
-                Payment Price  
-            </span>
-        </fieldset>
+        <?php echo $this->getChildHtml('total') ?>
     </div>
 </form>
 

@@ -12,4 +12,24 @@ class Ccc_Order_Block_Adminhtml_Cart_Customer extends Mage_Core_Block_Template
 
     }
 
+    public function getCustomers()
+    {
+        $collection = Mage::getModel('customer/customer')->getResourceCollection();
+        $collection->addAttributeToSelect('name');
+        $collection->joinAttribute(
+            'firstName',
+            'customer/firstName',
+            'entity_id',
+            null,
+            'inner'
+        );
+        $collection->joinAttribute(
+            'lastName',
+            'customer/lastName',
+            'entity_id',
+            null,
+            'inner'
+        );
+       return $collection;
+    }
 }

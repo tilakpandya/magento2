@@ -10,26 +10,6 @@ class Ccc_Order_Block_Adminhtml_Cart extends Mage_Core_Block_Template
         $this->_headerText = $this->__('Cart');
         //$this->setTemplate('order/adminhtml/cart.phtml');
 
-    }
+    }    
 
-    public function getCustomers()
-    {
-        $collection = Mage::getModel('customer/customer')->getResourceCollection();
-        $collection->addAttributeToSelect('name');
-        $collection->joinAttribute(
-            'firstName',
-            'customer/firstName',
-            'entity_id',
-            null,
-            'inner'
-        );
-        $collection->joinAttribute(
-            'lastName',
-            'customer/lastName',
-            'entity_id',
-            null,
-            'inner'
-        );
-       return $collection;
-    }
 }

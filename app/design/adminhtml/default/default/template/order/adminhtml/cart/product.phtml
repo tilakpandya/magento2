@@ -1,0 +1,44 @@
+<?php
+    $products = $this->getProducts();
+    /* echo "<pre>";
+    print_r($this->getProducts()); 
+    die; */
+?>
+<div class="entry-edit-head"><h4>Product</h4></div>
+    <fieldset class="a-center bold">
+    <span class="nowrap">
+        <center>        
+            <table class="data-table" id="my-product-table" width="50%">
+                <thead>
+                    <tr>
+                        <th><?php echo $this->__('SKU') ?></th>
+                        <th><?php echo $this->__('Name') ?></th>
+                        <th><?php echo $this->__('Price') ?></th>
+                        <th><?php echo $this->__('Select') ?></th>
+                        <th><?php echo $this->__('Quantity') ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($products as $product): ?>
+                    <tr>
+                        <td><?php echo $product['sku']; ?>&nbsp;</td>
+                        <td><?php echo $product['name']; ?>&nbsp;</td>
+                        <td><?php echo $product['price']; ?></td>
+                        <td><input type="checkbox" id="myCheckbox" onclick="enableDisable(this.checked, '<?= $product['entity_id'];?>')" value="" ></td>
+                        <td><input type="number" id="<?= $product['entity_id'];?>" value="" name="item[<?= $product['name']; ?>]" DISABLED></td>
+                    </tr>
+                    <?php endforeach;?>
+                </tbody>
+            </table>
+        <center>   
+    </span><br>
+    <input type="submit" title="Save Product" style="width:100px;height:25px">         
+</fieldset>
+
+<script language="javascript">
+    function enableDisable(bEnable, textBoxID)
+    {
+         document.getElementById(textBoxID).disabled = !bEnable
+         //alert(111);
+    }
+</script>

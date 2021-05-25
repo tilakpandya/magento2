@@ -1,0 +1,19 @@
+<?php $customers = $this->getCustomers();
+       /* echo "<pre>";
+       print_r($this->getPayment()); 
+       die;  */ 
+ ?>
+<div class="entry-edit-head"><h4>Customer</h4></div>
+            <fieldset class="a-center bold">
+            <span class="nowrap" style="font-size:18px;">
+            <label for="cars">Choose a customer:</label>
+                <select name="customer_name" style="width:150px;height:30px">
+                <option value="">--Select--</option>  
+                    <?php foreach ($customers as $key => $value):?>
+                    <option value="<?= $value['entity_id']?>"><?= $value['firstName']?> <?= $value['lastName']?></option>  
+                     <?php endforeach; ?>  
+                </select>  
+                <br><br>
+                <input type="submit" title="Save Customer" style="width:100px;height:25px">
+            </span>
+        </fieldset>

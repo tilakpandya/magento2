@@ -1,0 +1,44 @@
+<table class="table">
+                                  <tr>
+                                      <td colspan="2">
+                                          Same as Billing Address : &nbsp<input type="checkbox" name="sameasbilling"class="form-check-input" id="sameasbilling" onclick="myCheckbox();"
+                                          <?php if ($cartBillingAddress->sameAsBilling){echo "Checked";}?> >
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td>
+                                          <input type="text" name="shipping[address]" id="shippingAddress" value="<?php echo $cartShippingAddress->address;?>"
+                                              placeholder="Address" class="form-control" <?php if ($cartBillingAddress->sameAsBilling){echo "Disabled";}?>>
+                                      </td>
+                                  </tr>
+                                  <tr>    
+                                      <td>
+                                          <input type=" text" name="shipping[city]" id="shippingCity" value="<?php echo $cartShippingAddress->city;?>"
+                                              placeholder="City" class="form-control" <?php if ($cartBillingAddress->sameAsBilling){echo "Disabled";}?>>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td>
+                                          <input type="text" name="shipping[state]" id="shippingState" value="<?php echo $cartShippingAddress->state;?>"
+                                              placeholder="State" class="form-control" <?php if ($cartBillingAddress->sameAsBilling){echo "Disabled";}?>>
+                                      </td>
+                                  </tr>
+                                  <tr>    
+                                      <td>
+                                          <input type="text" name="shipping[zipcode]" id="shippingZipcode" value="<?php echo $cartShippingAddress->zipcode;?>"
+                                              placeholder="Zipcode" class="form-control" <?php if ($cartBillingAddress->sameAsBilling){echo "Disabled";}?>>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td>
+                                      <input type="text" name="shipping[country]" id="shippingCountry" value="<?php echo $cartShippingAddress->country; ?>"
+                                              placeholder="Country" class="form-control" <?php if ($cartBillingAddress->sameAsBilling){echo "Disabled";}?>>
+                                      </td>
+                                  </tr>
+                                  <tr>    
+                                      <td>
+                                          Save to Address book : <input type="checkbox" id="shippingSaveAddressBook" name="shippingSaveAddressBook" <?php if ($cartBillingAddress->sameAsBilling){echo "Disabled";}?>>
+                                      </td>
+                                  </tr>
+                                  
+                              </table>
