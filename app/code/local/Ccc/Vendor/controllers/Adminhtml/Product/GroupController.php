@@ -8,7 +8,7 @@ class Ccc_Vendor_Adminhtml_Vendor_GroupController extends Mage_Adminhtml_Control
         $model->setAttributeGroupName($this->getRequest()->getParam('attribute_group_name'))
               ->setAttributeSetId($this->getRequest()->getParam('attribute_set_id'));
 
-        if( $model->itemExists() ) {
+        if($model->itemExists() ) {
             Mage::getSingleton('vendor/session')->addError(Mage::helper('vendor')->__('A group with the same name already exists.'));
         } else {
             try {

@@ -219,8 +219,8 @@ class Ccc_Vendor_Adminhtml_ProductController extends Mage_Adminhtml_Controller_A
                     $this->_redirect('*/*/');
                 }
             } catch (Exception $e) {
-                Mage::logException($th);
-                Mage::getSingleton('core/session')->addError($th->getMessage());
+                Mage::logException($e);
+                Mage::getSingleton('core/session')->addError($e->getMessage());
                 $this->_redirect('*/*/');
             }
    }

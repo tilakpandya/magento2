@@ -3,7 +3,7 @@
        print_r($this->getPayment()); 
        die;  */ 
  ?>
-<form action="<?php echo $this->getUrl('*/adminhtml_order/test');?>" Method="POST">
+<form action="<?php echo $this->getUrl('*/adminhtml_order/test');?>" Method="POST" id="cartForm">
     <?php echo $this->getBlockHtml('formkey');?>
     <div class="entry-edit">
         <?php echo $this->getChildHtml('customer_list'); ?>

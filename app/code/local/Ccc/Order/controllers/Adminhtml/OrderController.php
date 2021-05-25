@@ -25,4 +25,10 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
             ->_addBreadcrumb($this->__('Orders'), $this->__('Orders'));
         $this->renderLayout();
     }
+
+    public function selectCustomerAction()
+    {
+        echo "Welcome";
+        die;
+    }
 }
