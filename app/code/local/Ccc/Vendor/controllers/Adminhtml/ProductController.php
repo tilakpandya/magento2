@@ -183,7 +183,7 @@ class Ccc_Vendor_Adminhtml_ProductController extends Mage_Adminhtml_Controller_A
         $product = Mage::getModel('vendor/product')
             ->setStoreId($this->getRequest()->getParam('store',0))
             ->load($productId);
-            
+        
             if (!$productId) {
                 if ($setId = (int)$this->getRequest()->getParam('set')) {
                     Mage::getModel('adminhtml/session')->setId($setId);
@@ -202,18 +202,26 @@ class Ccc_Vendor_Adminhtml_ProductController extends Mage_Adminhtml_Controller_A
                 unset($productData['store_id']);
 
                 $productRequestModel = Mage::getResourceModel('vendor/product_request_collection')
-                ->addFieldtoFilter('vendor_id',array('eq',$product->getVendorId()))->load()->getLastItem();
+                ->addFieldtoFilter('product_id',array('eq',$product->getId()))->load()->getLastItem();
+               
+                /* echo "<pre>";
+                print_r($productRequestModel);   
+                die;  */
 
                 $catalogProductModel = Mage::getModel('catalog/product');
-                $catalogProductId = $catalogProductModel->getCatalogProductId();
+                $catalogProductId = $productRequestModel->getCatalogProductId();
                 
                 if ($catalogProductModel->load($catalogProductId)) {
+
                     $catalogProductModel->addData($productData);
+                   
                     $catalogProductModel->save();
+                     
                     $productRequestModel->setRequestType('Edited');
                     $productRequestModel->setApproveStatus('Approved');
                     $productRequestModel->setCreatedAt($product->getUpdatedAt());
                     $productRequestModel->setApproveAt(time());
+                   
                     $productRequestModel->save();
                     Mage::getSingleton('core/session')->addSuccess($this->__('Edit product Request has been Approved.'));
                     $this->_redirect('*/*/');

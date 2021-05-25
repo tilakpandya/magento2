@@ -73,7 +73,7 @@ class Ccc_Vendor_Product_GroupController extends Mage_Core_Controller_Front_Acti
            
             $model->setAttributeGroupName($groupName)
                 ->setAttributeSetId($attributeSetId);
-            print_r($model); 
+           
             if ($model->itemExists()) {
                 Mage::getSingleton('vendor/session')->addError(Mage::helper('vendor')->__('A Group With same name exist already.'));
                 $this->_redirect('*/*/edit');
@@ -87,14 +87,17 @@ class Ccc_Vendor_Product_GroupController extends Mage_Core_Controller_Front_Acti
                    
                     $modelGroup->setVendorId($vendor->getId());
                     $modelGroup->setAttributeGroupId($model->getId());
-                    $modelGroup->setGroupName($this->getRequest()->getPost('group_name'));
+                    $modelGroup->setGroupName($this->getRequest()->getParam('group_name'));
                     $modelGroup->save();
                     Mage::getSingleton('vendor/session')->addSuccess(Mage::helper('vendor')->__('Information added successfully.'));                
                 } catch (Exception $e) {
+                    echo "<pre>";
+                    print_r($e);
+                    die;
                     Mage::getSingleton('vendor/session')->addError(Mage::helper('vendor')->__('An error occuring while save.'));
                 }
         }
-        print_r($modelGroup);   
+           
         
         $this->_redirect('*/*/');
     }
@@ -103,6 +106,7 @@ class Ccc_Vendor_Product_GroupController extends Mage_Core_Controller_Front_Acti
     {
         try {
             $modelGroup = Mage::getModel('vendor/product_attribute_group');
+            $model = Mage::getModel('eav/entity_attribute_group');
            
             if (!($Id = (int) $this->getRequest()->getParam('group_id')))
                 throw new Exception('Id not found');
@@ -110,8 +114,17 @@ class Ccc_Vendor_Product_GroupController extends Mage_Core_Controller_Front_Acti
             if (!$modelGroup->load($Id)) {
                 throw new Exception('product does not exist');
             }
+            /* echo "<pre>";
+           $abc =  $model->load($modelGroup->getAttributeGroupId());
+            print_r($abc);
 
-            if (!$modelGroup->delete()) {
+            die; */ 
+            $model->load($modelGroup->getAttributeGroupId());
+
+            if (!$modelGroup->delete() ) {
+                throw new Exception('Error in delete record');
+            } 
+            if (!$model->delete()) {
                 throw new Exception('Error in delete record');
             } 
             Mage::getSingleton('vendor/session')->addSuccess(Mage::helper('vendor')->__('Group Deleted successfully.'));                
