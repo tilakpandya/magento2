@@ -32,4 +32,9 @@ class Ccc_Order_Block_Adminhtml_Cart_Customer extends Mage_Core_Block_Template
         );
        return $collection;
     }
+
+    public function getActiveCustomer()
+    {
+        return Mage::getSingleton('order/session')->getCustomerId();
+    }
 }

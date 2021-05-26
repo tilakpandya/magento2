@@ -1,12 +1,23 @@
+<?php
+    $cartItems = $this->getCartItems();
+    $customerId = Mage::getSingleton('order/session')->getCustomerId();
+
+   /*  echo "<pre>";
+    print_r($cartItems); 
+    die; */ 
+?>
 <div class="entry-edit-head"><h4>Cart</h4></div>
 <fieldset class="a-center bold">
-    <span class="nowrap" >
+<form action="<?php echo $this->getUrl('*/adminhtml_order/updateItemToCart/');?>" Method="POST" id="cartForm">
+    <span class="nowrap">
+    <?php echo $this->getBlockHtml('formkey');?>
     <center>        
+
             <table border=1 class="data-table" id="my-product-table" width="50%">
+            <?php if($customerId):?>
                 <thead>
                     <tr>
-                        <th><?php echo $this->__('SKU') ?></th>
-                        <th><?php echo $this->__('Name') ?></th>
+                        <th><?php echo $this->__('Product id') ?></th>
                         <th><?php echo $this->__('Price') ?></th>
                         <th><?php echo $this->__('Quantity') ?></th>
                         <th><?php echo $this->__('Subtotal') ?></th>
@@ -16,21 +27,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
+                <?php foreach ($cartItems as $item): ?>
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td><?= $item['product_id']?></td>
+                        <td><?= $item['price']?></td>
+                        <td><input type="number" name="quantity[<?= $item['item_id']?>]" value="<?= $item['quantity']?>"></td>
+                        <td><?= $price = $item['price'] * $item['quantity']?></td>
+                        <td><input type="number" name="discount[<?= $item['item_id']?>]" value="<?= $item['discount']?>"></td>
+                        <td><?= $price - $item['discount']?></td>
+                        <td><a href="<?php echo $this->getUrl('*/adminhtml_order/deleteItemToCart/');?>">Delete</a></td>
                     </tr>
+                    <?php endforeach;?>
+                    <?php else:?>
+                            <tr>
+                                <td>Please Select Customer...</td>
+                            </tr>
+                            <?php endif;?>  
                 </tbody>
             </table>
         <center>     
     </span><br>
-<input type="submit" title="update cart" style="width:100px;height:25px">           
- 
+    <?php if($customerId):?>
+        <button type="submit" title="update cart" style="width:130px;height:25px">Update cart</button>     
+    <?php endif;?>          
+ </form>
 </fieldset>

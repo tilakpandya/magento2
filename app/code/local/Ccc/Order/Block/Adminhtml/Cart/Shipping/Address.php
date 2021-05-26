@@ -3,11 +3,7 @@
 class Ccc_Order_Block_Adminhtml_Cart_Shipping_Address
     extends Mage_Adminhtml_Block_Sales_Order_Create_Form_Address
 {
-    /**
-     * Return header text
-     *
-     * @return string
-     */
+
     public function getHeaderText()
     {
         return Mage::helper('order')->__('Shipping Address');
@@ -95,14 +91,36 @@ class Ccc_Order_Block_Adminhtml_Cart_Shipping_Address
      *
      * @return Mage_Customer_Model_Address
      */
+
     public function getAddress()
     {
-        if ($this->getIsAsBilling()) {
+       /*  if ($this->getIsAsBilling()) {
             $address = $this->getCreateOrderModel()->getBillingAddress();
         } else {
             $address = $this->getCreateOrderModel()->getShippingAddress();
         }
-        return $address;
+        return $address; */
+        echo "<pre>";
+        $customerId = Mage::getSingleton('order/session')->getCustomerId();
+        $collection = Mage::getModel('customer/customer_address')->getResourceCollection();
+
+        $collection->addAttributeToSelect('name');
+        $collection->joinAttribute(
+            'name',
+            'catalog_product/name',
+            'entity_id',
+             null,
+            'inner'
+        );
+        $collection->joinAttribute(
+            'price',
+            'catalog_product/price',
+            'entity_id',
+             null,
+            'inner'
+        );
+       return $collection->getData();
+        print_r($customerAddress);
     }
 
     /**
