@@ -1,5 +1,7 @@
 <?php 
- /* echo "<pre>";
+    $customerId = Mage::getSingleton('order/session')->getCustomerId();
+    $cart = $this->getCart();
+    /* echo "<pre>";
        print_r($this->getPayment()); 
        die;  */ 
  ?>
@@ -21,19 +23,29 @@
         <div class="entry-edit-head"><h4>customer Address</h4></div>
             <fieldset class="a-center bold">
             <span class="nowrap">
-            <center>
-                <table width="60%" class="table-class">
+            <center> 
+            <table width="60%" class="table-class">
+            <?php if($customerId):?>
+           
+                
                     <tr>
-                        <th><h2>Shipping Address</h2></th>
                         <th><h2>Billing Address</h2></th>
+                        <th><h2>Shipping Address</h2></th>
                     </tr>
                     <tr>
+                        <td><?php echo $this->getChild('billing_Address')->setCart($cart)->toHtml(); ?></td>
                         <td><?php echo $this->getChildHtml('shipping_Address'); ?></td>
-                        <td><?php echo $this->getChildHtml('billing_Address'); ?></td>
+
                     </tr>
-                </table> 
-            </center>    
-            <input type="submit" title="Save Product" style="width:100px;height:25px">           
+                
+               
+            <?php else:?>
+                    <tr>
+                            <td>Please Select Customer...</td>
+                    </tr>
+            <?php endif;?> 
+            </table> 
+            </center> 
             </span>
         </fieldset>
     </div>
@@ -41,7 +53,7 @@
     <div class="entry-edit">
         <div class="entry-edit-head"><h4>Payment Shippment</h4></div>
             <fieldset class="a-center bold">
-            <span class="nowrap" style="font-size:18px;">
+            <span class="nowrap">
                 <table width="100%" class="table-class">
                     <tr>
                         <td>                            
@@ -59,4 +71,33 @@
     <div class="entry-edit">
         <?php echo $this->getChildHtml('total') ?>
     </div>
+
+    <script>
+        function myCheckbox() {
+            var sameasbilling = document.getElementById("sameasbilling");
+            if (sameasbilling.checked == true) {
+                document.getElementById("shippingAddress").disabled = true;
+                document.getElementById("shippingCity").disabled = true;
+                document.getElementById("shippingState").disabled = true;
+                document.getElementById("shippingZipcode").disabled = true;
+                document.getElementById("shippingCountry").disabled = true;
+                document.getElementById("shippingPhone").disabled = true;
+                document.getElementById("shippingSaveAddressBook").disabled = true;
+
+            }else{
+                document.getElementById("shippingAddress").disabled = false;
+                document.getElementById("shippingCity").disabled = false;
+                document.getElementById("shippingState").disabled = false;
+                document.getElementById("shippingZipcode").disabled = false;
+                document.getElementById("shippingCountry").disabled = false; 
+                document.getElementById("shippingSaveAddressBook").disabled = false;
+                document.getElementById("shippingPhone").disabled = false;
+                document.getElementById("shippingButton").disabled = false;
+
+            }
+        }
+
+
+</script>     
+                     
 

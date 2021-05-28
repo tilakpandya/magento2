@@ -7,12 +7,12 @@
     </order_adminhtml_order_index>
     <order_adminhtml_order_start>
         <reference name="content">
-            <block type="order/adminhtml_cart" name="order.grid" template="order/adminhtml/cart.phtml">
+            <block type="order/adminhtml_cart" name="cart" template="order/adminhtml/cart.phtml">
                 <block type="order/Adminhtml_Cart_Customer" name="customer_list" template="order/adminhtml/cart/customer.phtml"/>
                 <block type="order/Adminhtml_Cart_Product" name="product" template="order/adminhtml/cart/product.phtml"/>
                 <block type="order/Adminhtml_Cart_Item" name="items" template="order/adminhtml/cart/item.phtml"/>
-                <block type="order/Adminhtml_Cart_Billing_Method" name="billing_method" template="order/adminhtml/cart/billing/method/form.phtml"/>
-                <block type="order/Adminhtml_Cart_Shipping_Method" name="shipping_method" template="order/adminhtml/cart/shipping/method/form.phtml"/>
+                <block type="order/Adminhtml_Cart_Billing_Method_Form" name="billing_method" template="order/adminhtml/cart/billing/method/form.phtml"/>
+                <block type="order/Adminhtml_Cart_Shipping_Method_Form" name="shipping_method" template="order/adminhtml/cart/shipping/method/form.phtml"/>
                 <block type="order/Adminhtml_Cart_Billing_Address" name="billing_Address" template="order/adminhtml/cart/billing/address.phtml"/>
                 <block type="order/Adminhtml_Cart_Shipping_Address" name="shipping_Address" template="order/adminhtml/cart/shipping/address.phtml"/>
                 <block type="order/Adminhtml_Cart_Total" name="total" template="order/adminhtml/cart/total.phtml"/>

@@ -35,27 +35,11 @@ $table = $installer->getConnection()
     ->addColumn('zipcode', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
         'nullable' => false,
     ))
+    ->addColumn('phone', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
+        'nullable' => false,
+    ));
     
-    ->addForeignKey(
-        $installer->getFkName(
-            'order/order_address',
-            'address_id',
-            'customer/address_entity',
-            'entity_id'
-        ),
-        'address_id', $installer->getTable('customer/address_entity'), 'entity_id',
-        Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
-
-        ->addForeignKey(
-            $installer->getFkName(
-                'order/order_address',
-                'order_id',
-                'order/order',
-                'order_id'
-            ),
-            'order_id', $installer->getTable('order/order'), 'order_id',
-            Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE);
-
+    
 $installer->getConnection()->createTable($table);
 
 $installer->endSetup();
@@ -68,7 +52,7 @@ $installer->startSetUp();
 //Table Order
 $orderTable = $installer->getConnection()
     ->newTable($installer->getTable('order/order_item'))
-    ->addColumn('order_item_id',Varien_Db_Ddl_Table::TYPE_SMALLINT,null,array(
+    ->addColumn('item_id',Varien_Db_Ddl_Table::TYPE_SMALLINT,null,array(
         'unsigned' => true,
         'nullable' => false,
         'primary' => true,
@@ -97,28 +81,9 @@ $orderTable = $installer->getConnection()
     ))
     ->addColumn('created_at',  Varien_Db_Ddl_Table::TYPE_DATETIME, null, array(
         'nullable' => false,
-    ))
+    ));
 
-    ->addForeignKey(
-        $installer->getFkName(
-            'order/order_item',
-            'product_id',
-            'catalog/product',
-            'entity_id'
-        ),
-        'product_id', $installer->getTable('catalog/product'), 'entity_id',
-        Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
-
-        ->addForeignKey(
-            $installer->getFkName(
-                'order/order_item',
-                'order_id',
-                'order/order',
-                'order_id'
-            ),
-            'order_id', $installer->getTable('order/order'), 'order_id',
-            Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE);
-            
+        
 $installer->getConnection()->createTable($orderTable);
 
 $installer->endSetup();

@@ -1,6 +1,6 @@
 <?php
 
-class Ccc_Order_Block_Adminhtml_Cart_Billing_Method extends Mage_Adminhtml_Block_Sales_Order_Create_Abstract
+class Ccc_Order_Block_Adminhtml_Cart_Billing_Method extends Mage_Core_Block_Template
 {
     public function __construct()
     {

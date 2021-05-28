@@ -1,13 +1,17 @@
 <?php
-    $address = $this->getAddress();
-    echo "<pre>";
-    print_r($address);
-    die;
+    $cartBillingAddress = $this->getBillingAddress();
+    $cart = $this->getCart();
+    /* echo "<pre>";
+    print_r($cart);
+    die; */  
 ?>
-<table class="table">
+<form action="<?php echo $this->getUrl('*/adminhtml_order/saveBillingAddress/');?>" Method="POST" id="cartForm">
+    <?php echo $this->getBlockHtml('formkey');?>
+
+    <table class="table">
                                   <tr>
                                       <td>
-                                          <input type="text" name="billing[address]" id="address" value="<?php echo $cartBillingAddress->address?>"
+                                          <input type="text" name="billing[address]" id="address" value="<?php if($cartBillingAddress->street){echo $cartBillingAddress->street;}if($cartBillingAddress->address){echo $cartBillingAddress->address;}?>"
                                               placeholder="Address" class="form-control">
                                       </td>
                                     </tr>  
@@ -19,19 +23,25 @@
                                   </tr>
                                   <tr>
                                       <td>
-                                          <input type="text" name="billing[state]" id="state" value="<?php echo $cartBillingAddress->state?>"
+                                          <input type="text" name="billing[state]" id="state" value="<?php if($cartBillingAddress->region){echo $cartBillingAddress->region;}if($cartBillingAddress->state){echo $cartBillingAddress->state;}?>"
                                               placeholder="State" class="form-control">
                                       </td>
                                   </tr>
                                   <tr>  
                                       <td>
-                                          <input type="text" name="billing[zipcode]" id="zipcode" value="<?php echo $cartBillingAddress->zipcode?>"
+                                          <input type="text" name="billing[zipcode]" id="zipcode" value="<?php if($cartBillingAddress->zipcode){echo $cartBillingAddress->zipcode;}if($cartBillingAddress->postcode){echo $cartBillingAddress->postcode;}?>"
                                               placeholder="Zipcode" class="form-control">
                                       </td>
                                   </tr>
                                   <tr>
                                       <td>
-                                      <input type="text" name="billing[country]" id="country" value="<?php echo $cartBillingAddress->country?>"
+                                      <input type="text" name="billing[country]" id="country" value="<?php if($cartBillingAddress->country){echo $cartBillingAddress->country;}if($cartBillingAddress->countryId){echo $cartBillingAddress->countryId;} ?>"
+                                              placeholder="Country" class="form-control">
+                                      </td>
+                                 </tr>
+                                 <tr>
+                                      <td>
+                                      <input type="number" name="billing[phone]" id="phone" value="<?php if($cartBillingAddress->phone){echo $cartBillingAddress->phone;}if($cartBillingAddress->telephone){echo $cartBillingAddress->telephone;} ?>"
                                               placeholder="Country" class="form-control">
                                       </td>
                                  </tr>
@@ -39,6 +49,7 @@
                                       <td>
                                           Save to Address book : <input type="checkbox" name="billingSaveAddressBook">
                                       </td>
-                                  </tr>
-
-</table>
+                                  </tr>                              
+    </table>
+<button type="submit" style="width:100px;height:25px">Submit</button> 
+</form>

@@ -1,0 +1,9 @@
+a:5:{i:0;s:227:"Error in file: "C:\xampp\htdocs\magento\app\code\local\Ccc\Order\sql\order_setup\mysql4-upgrade-0.0.5-0.0.6.php" - SQLSTATE[42000]: Syntax error or access violation: 1091 Can't DROP CONSTRAINT `product_id`; check that it exists";i:1;s:954:"#0 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\Resource\Setup.php(644): Mage::exception('Mage_Core', 'Error in file: ...')
+#1 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\Resource\Setup.php(437): Mage_Core_Model_Resource_Setup->_modifyResourceDb('upgrade', '0.0.5', '0.0.6')
+#2 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\Resource\Setup.php(320): Mage_Core_Model_Resource_Setup->_upgradeResourceDb('0.0.5', '0.0.6')
+#3 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\Resource\Setup.php(235): Mage_Core_Model_Resource_Setup->applyUpdates()
+#4 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\App.php(428): Mage_Core_Model_Resource_Setup::applyAllUpdates()
+#5 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\App.php(354): Mage_Core_Model_App->_initModules()
+#6 C:\xampp\htdocs\magento\app\Mage.php(683): Mage_Core_Model_App->run(Array)
+#7 C:\xampp\htdocs\magento\index.php(83): Mage::run('', 'store')
+#8 {main}";s:3:"url";s:84:"/magento/index.php/order/adminhtml_order/start/key/9f628c5e02b02563e8aa2d4b9a262322/";s:11:"script_name";s:18:"/magento/index.php";s:4:"skin";s:7:"default";}

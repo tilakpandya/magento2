@@ -2,6 +2,7 @@
 
 class Ccc_Order_Block_Adminhtml_Cart_Customer extends Mage_Core_Block_Template
 {
+    protected $cart;
     public function __construct()
     {
         parent::__construct();
@@ -32,6 +33,18 @@ class Ccc_Order_Block_Adminhtml_Cart_Customer extends Mage_Core_Block_Template
         );
        return $collection;
     }
+
+    public function setCart(Ccc_Order_Model_Cart $cart) {
+		$this->cart = $cart;
+		return $this;
+	}
+
+	public function getCart() {
+		if(!$this->cart) {
+			return false;
+		}
+		return $this->cart;
+	}
 
     public function getActiveCustomer()
     {

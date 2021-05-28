@@ -1,0 +1,20 @@
+a:5:{i:0;s:863:"Error in file: "C:\xampp\htdocs\magento\app\code\local\Ccc\Order\sql\order_setup\install-0.0.1.php" - SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'cart' already exists, query was: CREATE TABLE `cart` (
+  `cart_id` int NOT NULL auto_increment COMMENT 'Cart_id' ,
+  `customer_id` int UNSIGNED NOT NULL COMMENT 'Customer_id' ,
+  `session_id` text NULL COMMENT 'Session_id' ,
+  `total` decimal(10,0) NOT NULL COMMENT 'Total' ,
+  `discount` decimal(10,0) NOT NULL COMMENT 'Discount' ,
+  `shippingMethod_id` int UNSIGNED NOT NULL COMMENT 'ShippingMethod_id' ,
+  `shippingAmount` decimal(10,0) NOT NULL COMMENT 'ShippingAmount' ,
+  `paymentMethod_id` int UNSIGNED NOT NULL COMMENT 'PaymentMethod_id' ,
+  `created_at` datetime NOT NULL COMMENT 'Created_at' ,
+  PRIMARY KEY (`cart_id`)
+) COMMENT='cart' ENGINE=INNODB charset=utf8 COLLATE=utf8_general_ci";i:1;s:940:"#0 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\Resource\Setup.php(644): Mage::exception('Mage_Core', 'Error in file: ...')
+#1 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\Resource\Setup.php(421): Mage_Core_Model_Resource_Setup->_modifyResourceDb('install', '', '0.0.3')
+#2 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\Resource\Setup.php(327): Mage_Core_Model_Resource_Setup->_installResourceDb('0.0.3')
+#3 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\Resource\Setup.php(235): Mage_Core_Model_Resource_Setup->applyUpdates()
+#4 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\App.php(428): Mage_Core_Model_Resource_Setup::applyAllUpdates()
+#5 C:\xampp\htdocs\magento\app\code\core\Mage\Core\Model\App.php(354): Mage_Core_Model_App->_initModules()
+#6 C:\xampp\htdocs\magento\app\Mage.php(683): Mage_Core_Model_App->run(Array)
+#7 C:\xampp\htdocs\magento\index.php(83): Mage::run('', 'store')
+#8 {main}";s:3:"url";s:24:"/magento/index.php/admin";s:11:"script_name";s:18:"/magento/index.php";s:4:"skin";s:7:"default";}

@@ -11,7 +11,7 @@
 <form action="<?php echo $this->getUrl('*/adminhtml_order/updateItemToCart/');?>" Method="POST" id="cartForm">
     <span class="nowrap">
     <?php echo $this->getBlockHtml('formkey');?>
-    <center>        
+        <center>        
 
             <table border=1 class="data-table" id="my-product-table" width="50%">
             <?php if($customerId):?>
@@ -35,17 +35,17 @@
                         <td><?= $price = $item['price'] * $item['quantity']?></td>
                         <td><input type="number" name="discount[<?= $item['item_id']?>]" value="<?= $item['discount']?>"></td>
                         <td><?= $price - $item['discount']?></td>
-                        <td><a href="<?php echo $this->getUrl('*/adminhtml_order/deleteItemToCart/');?>">Delete</a></td>
+                        <td><button type="submit" value="<?= $item['item_id'] ?>" name="delete" >Delete</button></a></td>
                     </tr>
                     <?php endforeach;?>
                     <?php else:?>
                             <tr>
                                 <td>Please Select Customer...</td>
                             </tr>
-                            <?php endif;?>  
+                    <?php endif;?>  
                 </tbody>
             </table>
-        <center>     
+        </center>     
     </span><br>
     <?php if($customerId):?>
         <button type="submit" title="update cart" style="width:130px;height:25px">Update cart</button>     

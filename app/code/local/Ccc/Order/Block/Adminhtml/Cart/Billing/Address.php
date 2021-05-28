@@ -1,72 +1,39 @@
 <?php
 
 class Ccc_Order_Block_Adminhtml_Cart_Billing_Address
-    extends Mage_Adminhtml_Block_Sales_Order_Create_Form_Address
+    extends Mage_Core_Block_Template
 {
-    /**
-     * Return header text
-     *
-     * @return string
-     */
-    public function getHeaderText()
+    public function getBillingAddress()
     {
-        return Mage::helper('sales')->__('Billing Address');
+        
+        $customerId = Mage::getSingleton('order/session')->getCustomerId();
+        $cartId = Mage::getModel('order/cart')->load($customerId,'customer_id')->getId();
+        $cartBillingAddress = Mage::getModel('order/cart_address')->getCollection();
+
+        $cartAddressCollection = Mage::getModel('order/cart_address')->getCollection();
+        $select = $cartAddressCollection->getSelect()->where("cart_id = $cartId AND address_type = 'Billing'");
+        $cartAddressData = $cartAddressCollection->getResource()->getReadConnection()->fetchRow($select);
+        $cartAddressCollection = Mage::getModel('order/cart_address')->load($cartAddressData['cart_address_id']);
+        
+        if($cartAddressData)
+        {
+            return $cartAddressCollection;
+        }
+        
+        $collection = Mage::getModel('customer/customer')->load($customerId)->getDefaultBillingAddress();
+        return $collection;
     }
 
-    /**
-     * Return Header CSS Class
-     *
-     * @return string
-     */
-    public function getHeaderCssClass()
-    {
-        return 'head-billing-address';
-    }
+    public function setCart(Ccc_Order_Model_Cart $cart) {
+		$this->cart = $cart;
+		return $this;
+	}
 
-    /**
-     * Prepare Form and add elements to form
-     *
-     * @return Mage_Adminhtml_Block_Sales_Order_Create_Billing_Address
-     */
-    protected function _prepareForm()
-    {
-        $this->setJsVariablePrefix('billingAddress');
-        parent::_prepareForm();
-
-        $this->_form->addFieldNameSuffix('order[billing_address]');
-        $this->_form->setHtmlNamePrefix('order[billing_address]');
-        $this->_form->setHtmlIdPrefix('order-billing_address_');
-
-        return $this;
-    }
-
-    /**
-     * Return Form Elements values
-     *
-     * @return array
-     */
-    public function getFormValues()
-    {
-        return $this->getCreateOrderModel()->getBillingAddress()->getData();
-    }
-
-    /**
-     * Return customer address id
-     *
-     * @return int|boolean
-     */
-    public function getAddressId()
-    {
-        return $this->getCreateOrderModel()->getBillingAddress()->getCustomerAddressId();
-    }
-
-    /**
-     * Return billing address object
-     *
-     * @return Mage_Customer_Model_Address
-     */
-    public function getAddress()
-    {
-        return $this->getCreateOrderModel()->getBillingAddress();
-    }
+	public function getCart() {
+		if(!$this->cart) {
+			throw new Exception("cart not found..");
+            
+		}
+		return $this->cart;
+	}
 }

@@ -536,6 +536,7 @@ abstract class Zend_Db_Adapter_Abstract
      */
     public function insert($table, array $bind)
     {
+       
         // extract and quote col names from the array keys
         $cols = array();
         $vals = array();
