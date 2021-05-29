@@ -11,6 +11,7 @@ class Ccc_Order_Model_Cart extends Mage_Core_Model_Abstract
     protected $shippingMethodAmount = null;
     protected $cart = null;
 
+
     public function _construct() 
     {
         $this->_init('order/cart');
@@ -25,47 +26,36 @@ class Ccc_Order_Model_Cart extends Mage_Core_Model_Abstract
 		if($this->customer) {
 			return $this->customer;
 		}
-		$customer = Mage::getModel('customer/customer')->load($this->customer_id);
-		$this->setCustomer($customer);
-		return $this->customer;
-	}
-
-    public function getItems()
-    {
-
         if (!$this->cartId) {
             return false;
         }
-        $query = "SELECT * FROM `cart_item` WHERE `cartId` = '{$this->cartId}'";
-        $items =  \Mage::getModel('order\cart_item')->fetchAll($query);
-        $this->setItems($items);
-        return $items;
-    }
-
-    public function setItems($items)
-    {
-        $this->items = $items;
-        return $this;
-    }
+		$customer = Mage::getModel('customer/customer')->load($this->getCustomerId());
+		$this->setCustomer($customer);
+		return $this->customer;
+	}
+    
 
     public function getBillingAddress()
     {
+        if ($this->billingAddress) {
+            return $this->billingAddress;
+        }
         if (!$this->cartId) {
-           return false;
+            return false;
         }
-       
-        $query = "SELECT * FROM `cart_address` 
-        WHERE `cartId` = '{$this->cartId}' AND `addressType`='Billing'";
-    
-        $billingAddress = \Mage::getModel('Model\Cart\CartAddress')->fetchRow($query);
-        if (!$billingAddress) {
-           return null;
-        }
-        $this->setBillingAddress($billingAddress);
-        return $this->billingAddress; 
+        
+        $address = Mage::getModel('order/cart_address');
+        
+        $addressCollection = $address->getCollection()
+            ->addFieldToFilter('cart_id',['eq'=>$this->cartId])
+            ->addFieldToFilter('address_type',['eq'=>Ccc_Order_Model_Cart_Address::ADDRESS_TYPE_BILLING]);
+            
+        $address = $addressCollection->getFirstItem();
+        
+        return $address;    
     }
 
-    public function setBillingAddress(\Model\Cart\CartAddress $billingAddress)
+    public function setBillingAddress($billingAddress)
     {
         $this->billingAddress = $billingAddress;
         return $this;
@@ -74,17 +64,22 @@ class Ccc_Order_Model_Cart extends Mage_Core_Model_Abstract
 
     public function getShippingAddress()
     {
+        if ($this->shippingAddress) {
+            return $this->shippingAddress;
+        }
         if (!$this->cartId) {
             return false;
         }
         
-        $query = "SELECT * FROM `cart_address` 
-        WHERE `cartId` = '{$this->cartId}' AND `addressType`='Shipping'";
-
-        $shippingAddress = Mage::getModel('Model\Cart\CartAddress')->fetchRow($query);
+        $address = Mage::getModel('order/cart_address');
         
-        $this->setShippingAddress($shippingAddress);
-        return $this->shippingAddress;
+        $addressCollection = $address->getCollection()
+            ->addFieldToFilter('cart_id',['eq'=>$this->cartId])
+            ->addFieldToFilter('address_type',['eq'=>Ccc_Order_Model_Cart_Address::ADDRESS_TYPE_SHIPPING]);
+            
+        $address = $addressCollection->getFirstItem();
+        
+        return $address;    
     }
 
     public function setShippingAddress($shippingAddress)

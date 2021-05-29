@@ -139,7 +139,7 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
 
     public function updateItemToCartAction()
     {
-       
+
             $qtyItems = $this->getRequest()->getPost('quantity');
             $delete = $this->getRequest()->getPost('delete');
             if ($delete) {
@@ -170,85 +170,83 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
     public function saveShippingAddressAction()
     {
         echo "<pre>";
-        $cartId = $this->getCart()->getId();
-        $customerId = Mage::getModel('order/session')->getCustomerId();
-        $shippingAddress = $this->getRequest()->getPost('shipping');
-        $sameAsBilling = $this->getRequest()->getPost('sameasbilling');
-        $customerAddressId = Mage::getModel('customer/customer')->load($customerId)->getDefaultShippingAddress()->getEntityId();
+        $cart = $this->getCart();
         
-        $cartAddressCollection = Mage::getModel('order/cart_address')->getCollection();
-        $select = $cartAddressCollection->getSelect()->where("cart_id = $cartId AND address_type = 'Shipping'");
-        $cartAddressData = $cartAddressCollection->getResource()->getReadConnection()->fetchRow($select);
-       
-        $cartShippingAddress = Mage::getModel('order/cart_address');
-        
-        if ($cartAddressData) {
-            $cartShippingAddress->load($cartAddressData['cart_address_id']);
-            unset($cartAddressData['cart_address_id']);
-            
-        }
+        $shippingingAddress = $this->getRequest()->getPost('shipping'); 
+        $saveInAddressBook = $this->getRequest()->getPost('shippingSaveAddressBook');
+        $sameAsBilling= $this->getRequest()->getPost('sameasbilling');
+
         if ($sameAsBilling) {
-            $cartAddressCollection = Mage::getModel('order/cart_address')->getCollection();
-            echo $select = $cartAddressCollection->getSelect()->where("cart_id = $cartId AND address_type = 'Billing'");
-            $cartAddressData = $cartAddressCollection->getResource()->getReadConnection()->fetchRow($select);
-            $cartBillingAddress = Mage::getModel('order/cart_address')->load($cartAddressData['cart_address_id'],'cart_address_id');
-            /* print_r($cartBillingAddress); die; */
-            $cartBillingAddress->same_as_billing = 1;
+            $cartBillingAddress = $cart->getBillingAddress();
+            $cartBillingAddress->setSameAsBilling(1);
             $cartBillingAddress->save();
-            /* $select = $cartAddressCollection->getSelect()->where("cart_id = $cartId AND address_type = 'Shipping'");
-            $cartAddressData = $cartAddressCollection->getResource()->getReadConnection()->fetchRow($select);
-            $cartShippingAddress = Mage::getModel('order/cart_address')->load($cartAddressData['cart_address_id'],'cart_address_id')->delete(); */
+
+            $cart->getShippingAddress()->delete();
+
+            if ($saveInAddressBook) {
+                $customerShippingAddress = $cart->getCustomer()->getShippingAddress();
+                $customerShippingAddress->setStreet($cartBillingAddress->address);
+                $customerShippingAddress->setCountryId($cartBillingAddress->country);
+                $customerShippingAddress->setRegion($cartBillingAddress->state);
+                $customerShippingAddress->setPostcode($cartBillingAddress->zipcode);
+                $customerShippingAddress->setTelephone($cartBillingAddress->phone);
+                $customerShippingAddress->setCity($cartBillingAddress->city);
+                $customerShippingAddress->save();
             }
-            
-        //$cartShippingAddress->setData($shippingAddress);
-        $cartShippingAddress->address = $shippingAddress['address'];
-        $cartShippingAddress->state = $shippingAddress['state'];
-        $cartShippingAddress->city = $shippingAddress['city'];
-        $cartShippingAddress->zipcode = $shippingAddress['zipcode'];
-        $cartShippingAddress->country = $shippingAddress['country'];
-        $cartShippingAddress->phone = $shippingAddress['phone'];
-        $cartShippingAddress->cart_id = $cartId;
-        $cartShippingAddress->address_id = $customerAddressId;
-        $cartShippingAddress->same_as_billing = 0;
-        $cartShippingAddress->address_type = "Shipping";
+            $this->_redirect('*/adminhtml_order/start');
+        }else{
+            $cartShippingAddress = $cart->getShippingAddress();
         
-        $cartShippingAddress->save();
-        print_r($cartShippingAddress);
-        die; 
-        $this->_redirect('*/adminhtml_order/start');
+            $cartShippingAddress->addData($shippingingAddress);    
+            $cartShippingAddress->setCartId($cart->getId());  
+           
+            $cartShippingAddress->setAddressId($cart->getCustomer()->getDefaultShippingAddress()->getId());  
+            $cartShippingAddress->setAddressType('Shipping');   
+            $cartShippingAddress->save();
+            
+            if ($saveInAddressBook) {
+                $customerShippingAddress = $cart->getCustomer()->getShippingAddress();
+                $customerShippingAddress->setStreet($shippingingAddress['address']);
+                $customerShippingAddress->setCountryId($shippingingAddress['country']);
+                $customerShippingAddress->setRegion($shippingingAddress['state']);
+                $customerShippingAddress->setPostcode($shippingingAddress['zipcode']);
+                $customerShippingAddress->setTelephone($shippingingAddress['phone']);
+                $customerShippingAddress->setCity($shippingingAddress['city']);
+                $customerShippingAddress->save();
+            }
+            $this->_redirect('*/adminhtml_order/start');
+        } 
+
+        
+
+         
     }
 
     public function saveBillingAddressAction()
     {
         echo "<pre>";
-        $cartId = $this->getCart()->getId();
-        $customerId = Mage::getModel('order/session')->getCustomerId();
+        $cart = $this->getCart();
         $billingAddress = $this->getRequest()->getPost('billing'); 
-        $customerAddressId = Mage::getModel('customer/customer')->load($customerId)->getDefaultBillingAddress()->getEntityId();
+        $saveInAddressBook = $this->getRequest()->getPost('billingSaveAddressBook');
 
-        $cartAddressCollection = Mage::getModel('order/cart_address')->getCollection();
-        $select = $cartAddressCollection->getSelect()->where("cart_id = $cartId AND address_type = 'Billing'");
-        $cartAddressData = $cartAddressCollection->getResource()->getReadConnection()->fetchRow($select);
+        $cartBillingAddress = $cart->getBillingAddress();
+        $cartBillingAddress->addData($billingAddress);    
+        $cartBillingAddress->setCartId($cart->getId()); 
+        $cartBillingAddress->setAddressId($cart->getCustomer()->getDefaultBillingAddress()->getId());   
+        $cartBillingAddress->setAddressType('Billing');   
+        $cartBillingAddress->save();
         
-        if ($cartAddressData) {
-            $cartAddress = Mage::getModel('order/cart_address')->load($cartAddressData['cart_address_id']); 
-            unset($cartAddressData['cart_address_id']);
-        }else{
-            $cartAddress = Mage::getModel('order/cart_address');
+        if ($saveInAddressBook) {
+            $customerBillingAddress = $cart->getCustomer()->getBillingAddress();
+            $customerBillingAddress->setStreet($billingAddress['address']);
+            $customerBillingAddress->setCountryId($billingAddress['country']);
+            $customerBillingAddress->setRegion($billingAddress['state']);
+            $customerBillingAddress->setPostcode($billingAddress['zipcode']);
+            $customerBillingAddress->setTelephone($billingAddress['phone']);
+            $customerBillingAddress->setCity($billingAddress['city']);
+            $customerBillingAddress->save();
         }
-        $cartAddress->address = $billingAddress['address'];
-        $cartAddress->state = $billingAddress['state'];
-        $cartAddress->city = $billingAddress['city'];
-        $cartAddress->zipcode = $billingAddress['zipcode'];
-        $cartAddress->country = $billingAddress['country'];
-        $cartAddress->phone = $billingAddress['phone'];
-        $cartAddress->cart_id = $cartId;
-        $cartAddress->address_id = $customerAddressId;
-        $cartAddress->address_type = "Billing";
-       
-        $cartAddress->save();
-        print_r($cartAddress);
-        die;
+        
         $this->_redirect('*/adminhtml_order/start');
 
     }

@@ -34,7 +34,7 @@
                     </tr>
                     <tr>
                         <td><?php echo $this->getChild('billing_Address')->setCart($cart)->toHtml(); ?></td>
-                        <td><?php echo $this->getChildHtml('shipping_Address'); ?></td>
+                        <td><?php echo $this->getChild('shipping_Address')->setCart($cart)->toHtml(); ?></td>
 
                     </tr>
                 
@@ -82,7 +82,6 @@
                 document.getElementById("shippingZipcode").disabled = true;
                 document.getElementById("shippingCountry").disabled = true;
                 document.getElementById("shippingPhone").disabled = true;
-                document.getElementById("shippingSaveAddressBook").disabled = true;
 
             }else{
                 document.getElementById("shippingAddress").disabled = false;
@@ -90,9 +89,7 @@
                 document.getElementById("shippingState").disabled = false;
                 document.getElementById("shippingZipcode").disabled = false;
                 document.getElementById("shippingCountry").disabled = false; 
-                document.getElementById("shippingSaveAddressBook").disabled = false;
                 document.getElementById("shippingPhone").disabled = false;
-                document.getElementById("shippingButton").disabled = false;
 
             }
         }

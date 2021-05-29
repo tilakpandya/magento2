@@ -3,27 +3,24 @@
 class Ccc_Order_Block_Adminhtml_Cart_Billing_Address
     extends Mage_Core_Block_Template
 {
+    protected $cart = null;
     public function getBillingAddress()
-    {
-        
-        $customerId = Mage::getSingleton('order/session')->getCustomerId();
-        $cartId = Mage::getModel('order/cart')->load($customerId,'customer_id')->getId();
-        $cartBillingAddress = Mage::getModel('order/cart_address')->getCollection();
-
-        $cartAddressCollection = Mage::getModel('order/cart_address')->getCollection();
-        $select = $cartAddressCollection->getSelect()->where("cart_id = $cartId AND address_type = 'Billing'");
-        $cartAddressData = $cartAddressCollection->getResource()->getReadConnection()->fetchRow($select);
-        $cartAddressCollection = Mage::getModel('order/cart_address')->load($cartAddressData['cart_address_id']);
-        
-        if($cartAddressData)
-        {
-            return $cartAddressCollection;
+    { 
+        $address = $this->getCart()->getBillingAddress();
+        if ($address->getId()) {
+            return $address;
         }
-        
-        $collection = Mage::getModel('customer/customer')->load($customerId)->getDefaultBillingAddress();
-        return $collection;
+        $customerAddress = $this->getCart()->getCustomer()->getDefaultBillingAddress();
+       if ($customerAddress == NULL) {
+           return $address;
+       }
+        return $customerAddress;
     }
 
+    public function getCountryName()
+    {
+        return Mage::getModel('directory/country_api')->items();
+    }
     public function setCart(Ccc_Order_Model_Cart $cart) {
 		$this->cart = $cart;
 		return $this;

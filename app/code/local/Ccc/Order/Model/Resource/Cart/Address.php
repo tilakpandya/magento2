@@ -3,6 +3,6 @@ class Ccc_Order_Model_Resource_Cart_Address extends Mage_Core_Model_Resource_Db_
 {
     protected function _construct() 
     {
-        $this->_init('order/cart_address','address_id');
+        $this->_init('order/cart_address','cart_address_id');
     }
 }

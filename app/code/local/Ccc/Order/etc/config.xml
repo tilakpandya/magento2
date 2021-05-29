@@ -20,6 +20,11 @@
 	  </blocks>
 
     <models>
+          <customer>
+            <rewrite>
+              <customer>Ccc_Order_Model_Customer</customer>
+            </rewrite>
+          </customer>
             <order>
                 <class>Ccc_Order_Model</class>
                 <resourceModel>order_resource</resourceModel>

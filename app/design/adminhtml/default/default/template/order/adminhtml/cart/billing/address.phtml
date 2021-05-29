@@ -1,9 +1,12 @@
 <?php
     $cartBillingAddress = $this->getBillingAddress();
-    $cart = $this->getCart();
-    /* echo "<pre>";
-    print_r($cart);
-    die; */  
+    $countries = $this->getCountryName();
+    //$cartBillingAddress = $this->getCart()->getBillingAddress();
+   /*";
+    print_r($countries);
+     die; */
+     
+       
 ?>
 <form action="<?php echo $this->getUrl('*/adminhtml_order/saveBillingAddress/');?>" Method="POST" id="cartForm">
     <?php echo $this->getBlockHtml('formkey');?>
@@ -35,8 +38,16 @@
                                   </tr>
                                   <tr>
                                       <td>
-                                      <input type="text" name="billing[country]" id="country" value="<?php if($cartBillingAddress->country){echo $cartBillingAddress->country;}if($cartBillingAddress->countryId){echo $cartBillingAddress->countryId;} ?>"
-                                              placeholder="Country" class="form-control">
+                                      
+                                       <select id="country_name" name="billing[country]">
+                                            <option value="">Select Country</option>
+                                            <?php foreach($countries as $key => $country):?>
+                                                <option name="country_name" value="<?php echo $country['country_id'];?>"
+                                                 <?php if ($cartBillingAddress['country_id'] == $country['country_id']){ echo "Selected";}?><?php if ($cartBillingAddress['country'] == $country['country_id']){ echo "Selected";}?>>
+                                                 <?php echo $country['name']?>
+                                                 </option>
+                                            <?php endforeach;?>
+                                       </select>
                                       </td>
                                  </tr>
                                  <tr>

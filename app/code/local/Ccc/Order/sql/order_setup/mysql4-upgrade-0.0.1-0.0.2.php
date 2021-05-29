@@ -37,14 +37,11 @@ $table = $installer->getConnection()
     ))
     ->addColumn('same_as_billing', Varien_Db_Ddl_Table::TYPE_TINYINT, null, array(
         'nullable' => true,
-    ))
-    ->addColumn('phone', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
-        'nullable' => false,
     ));
     
-    
-$installer->getConnection()->createTable($table);
 
+
+$installer->getConnection()->createTable($table);
 $installer->endSetup();
 
 
@@ -55,7 +52,7 @@ $installer->startSetUp();
 //Table Order
 $orderTable = $installer->getConnection()
     ->newTable($installer->getTable('order/cart_item'))
-    ->addColumn('item_id',Varien_Db_Ddl_Table::TYPE_SMALLINT,null,array(
+    ->addColumn('cart_item_id',Varien_Db_Ddl_Table::TYPE_SMALLINT,null,array(
         'unsigned' => true,
         'nullable' => false,
         'primary' => true,
@@ -81,9 +78,27 @@ $orderTable = $installer->getConnection()
     ))
     ->addColumn('created_at',  Varien_Db_Ddl_Table::TYPE_DATETIME, null, array(
         'nullable' => false,
-    ));
+    ))
 
-    
+    ->addForeignKey(
+        $installer->getFkName(
+            'order/cart_item',
+            'product_id',
+            'catalog/product',
+            'entity_id'
+        ),
+        'product_id', $installer->getTable('catalog/product'), 'entity_id',
+        Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
+
+        ->addForeignKey(
+            $installer->getFkName(
+                'order/cart_item',
+                'cart_id',
+                'order/cart',
+                'cart_id'
+            ),
+            'cart_id', $installer->getTable('order/cart'), 'cart_id',
+            Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE);
             
 $installer->getConnection()->createTable($orderTable);
 
