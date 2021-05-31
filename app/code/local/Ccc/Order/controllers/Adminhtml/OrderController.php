@@ -24,7 +24,7 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
         $this->loadLayout()
             ->_setActiveMenu('order')
             ->_addBreadcrumb($this->__('Orders'), $this->__('View'));
-        //$this->_addContent($this->getLayout()->createBlock('order/adminhtml_order_view'));
+        $this->_addContent($this->getLayout()->createBlock('order/adminhtml_order_view'));
         $this->renderLayout();
     }
 
