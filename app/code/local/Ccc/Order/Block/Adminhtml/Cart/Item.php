@@ -26,10 +26,10 @@ class Ccc_Order_Block_Adminhtml_Cart_Item extends Mage_Core_Block_Template
                 $cart = $collection->getResource()->getReadConnection()->fetchRow($select);
 
         $cartItemCollection = Mage::getModel('order/cart_item')->getCollection();
-        $collection = $cartItemCollection->addFieldToSelect(['item_id','cart_id','customer_id','product_id','quantity','base_price','price','discount'])
+        $collection = $cartItemCollection->addFieldToSelect(['item_id','cart_id','customer_id','product_id','product_name','quantity','base_price','price','discount'])
                     ->addFieldToFilter('cart_id',['eq'=>$cart['cart_id']]);
                 $collection->getSelect()->reset(Zend_Db_Select::COLUMNS)
-                    ->columns(['item_id','cart_id','product_id','quantity','base_price','price','discount']);
+                    ->columns(['item_id','cart_id','product_id','product_name','quantity','base_price','price','discount']);
                     
                 $select = $collection->getSelect(); 
                 $cartItem = $collection->getResource()->getReadConnection()->fetchAll($select); 

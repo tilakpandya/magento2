@@ -18,6 +18,7 @@
                 <thead>
                     <tr>
                         <th><?php echo $this->__('Product id') ?></th>
+                        <th><?php echo $this->__('Product name') ?></th>
                         <th><?php echo $this->__('Price') ?></th>
                         <th><?php echo $this->__('Quantity') ?></th>
                         <th><?php echo $this->__('Subtotal') ?></th>
@@ -30,6 +31,7 @@
                 <?php foreach ($cartItems as $item): ?>
                     <tr>
                         <td><?= $item['product_id']?></td>
+                        <td><?= $item['product_name']?></td>
                         <td><?= $item['price']?></td>
                         <td><input type="number" name="quantity[<?= $item['item_id']?>]" value="<?= $item['quantity']?>"></td>
                         <td><?= $price = $item['price'] * $item['quantity']?></td>
