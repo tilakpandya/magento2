@@ -5,7 +5,7 @@
     print_r($this->getProducts()); 
     die; */
 ?>
-<div class="entry-edit-head"><h4>Product</h4></div>
+<div class="entry-edit-head" ><h4>Product</h4></div>
     <form action="<?php echo $this->getUrl('*/adminhtml_order/addItemToCart');?>" Method="POST" id="cartForm">
         <?php echo $this->getBlockHtml('formkey');?>
         <fieldset class="a-center bold">
@@ -41,7 +41,7 @@
                 <center>   
             </span><br>
             <?php if($customerId):?>
-                <button type="submit" title="Save Product" style="width:100px;height:25px">Save</button>    
+                <button type="submit" title="Save Product" style="width:100px;height:25px" id="hide">Save</button>
             <?php endif;?>     
         </fieldset>
     </form>    
@@ -51,6 +51,6 @@
     function enableDisable(bEnable, textBoxID)
     {
          document.getElementById(textBoxID).disabled = !bEnable
-         //alert(111);
+        
     }
 </script>

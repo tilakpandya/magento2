@@ -1,56 +1,74 @@
 <?php
-    $cartItems = $this->getCartItems();
-    $customerId = Mage::getSingleton('order/session')->getCustomerId();
-
-   /*  echo "<pre>";
-    print_r($cartItems); 
-    die; */ 
+$cartItems = $this->getCartItems();
+$customerId = Mage::getSingleton('order/session')->getCustomerId();
 ?>
-<div class="entry-edit-head"><h4>Cart</h4></div>
-<fieldset class="a-center bold">
-<form action="<?php echo $this->getUrl('*/adminhtml_order/updateItemToCart/');?>" Method="POST" id="cartForm">
-    <span class="nowrap">
-    <?php echo $this->getBlockHtml('formkey');?>
-        <center>        
-
-            <table border=1 class="data-table" id="my-product-table" width="50%">
-            <?php if($customerId):?>
-                <thead>
-                    <tr>
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <h4>Cart Items</h4>
+    </div>
+    <fieldset class="np">
+        <form action="<?php echo $this->getUrl('*/adminhtml_order/updateItemToCart/'); ?>" Method="POST" id="cartForm">   
+            <?php echo $this->getBlockHtml('formkey');?>
+            <div class="grid np">
+                <table cellspacing="0" style="border:0;" id="lastOrdersGrid_table">
+                <?php if ($customerId) : ?>
+                    <colgroup>
+                        <col>
+                        <col width="100">
+                        <col width="100">
+                    </colgroup>
+                    <thead>
+                        <tr class="headings">
                         <th><?php echo $this->__('Product id') ?></th>
-                        <th><?php echo $this->__('Product name') ?></th>
-                        <th><?php echo $this->__('Price') ?></th>
-                        <th><?php echo $this->__('Quantity') ?></th>
-                        <th><?php echo $this->__('Subtotal') ?></th>
-                        <th><?php echo $this->__('Discount') ?></th>
-                        <th><?php echo $this->__('Row Total') ?></th>
-                        <th><?php echo $this->__('Action') ?></th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($cartItems as $item): ?>
-                    <tr>
-                        <td><?= $item['product_id']?></td>
-                        <td><?= $item['product_name']?></td>
-                        <td><?= $item['price']?></td>
-                        <td><input type="number" name="quantity[<?= $item['item_id']?>]" value="<?= $item['quantity']?>"></td>
-                        <td><?= $price = $item['price'] * $item['quantity']?></td>
-                        <td><input type="number" name="discount[<?= $item['item_id']?>]" value="<?= $item['discount']?>"></td>
-                        <td><?= $price - $item['discount']?></td>
-                        <td><button type="submit" value="<?= $item['item_id'] ?>" name="delete" >Delete</button></a></td>
-                    </tr>
-                    <?php endforeach;?>
-                    <?php else:?>
-                            <tr>
-                                <td>Please Select Customer...</td>
-                            </tr>
-                    <?php endif;?>  
-                </tbody>
-            </table>
-        </center>     
-    </span><br>
-    <?php if($customerId):?>
-        <button type="submit" title="update cart" style="width:130px;height:25px">Update cart</button>     
-    <?php endif;?>          
- </form>
-</fieldset>
+                                    <th><?php echo $this->__('Product name') ?></th>
+                                    <th><?php echo $this->__('Price') ?></th>
+                                    <th><?php echo $this->__('Quantity') ?></th>
+                                    <th><?php echo $this->__('Subtotal') ?></th>
+                                    <th><?php echo $this->__('Discount') ?></th>
+                                    <th><?php echo $this->__('Row Total') ?></th>
+                                    <th><?php echo $this->__('Action') ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($cartItems as $item) : ?>
+                                    <tr>
+                                        <td><?= $item['product_id'] ?></td>
+                                        <td><?= $item['product_name'] ?></td>
+                                        <td>$<?= $item['price'] ?></td>
+                                        <td><input type="number" name="quantity[<?= $item['item_id'] ?>]" id="quantity" value="<?= $item['quantity'] ?>" min="1" required></td>
+                                        <td>$<?= $price = $item['price'] * $item['quantity'] ?></td>
+                                        <td><input type="number" name="discount[<?= $item['item_id'] ?>]" id="discount" value="<?= $item['discount'] ?>" min="0" required></td>
+                                        <td>$<?= $price - $item['discount'] ?></td>
+                                        <td><button type="submit" value="<?= $item['item_id'] ?>" name="delete">Delete</button></a></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <tr>
+                                    <td>Please Select Customer...</td>
+                                </tr>
+                            <?php endif; ?>
+                            </tbody>
+                    </tbody>
+                </table>
+                <center>
+                    <?php if ($customerId) : ?>
+                        <button type="submit" title="update cart" style="width:130px;height:25px">Update cart</button>
+                        <button type="button" title="Add Product" style="width:130px;height:25px" id="show">Add Product</button>
+                    <?php endif; ?>
+                </center>
+                
+            </div>
+        </form>   
+    </fieldset>
+    
+</div>
+<script>
+    $(document).ready(function() {
+        $("#hide").click(function() {
+            $('#myDiv').hide();
+        });
+        $("#show").click(function() {
+            $("#myDiv").show();
+        });
+    });
+</script>

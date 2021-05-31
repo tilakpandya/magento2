@@ -1,3 +1,4 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <?php 
     $customerId = Mage::getSingleton('order/session')->getCustomerId();
     $cart = $this->getCart();
@@ -9,7 +10,7 @@
         <?php echo $this->getChildHtml('customer_list'); ?>
     </div>
 
-    <div class="entry-edit">
+    <div class="entry-edit" id="myDiv" hidden>
         <?php echo $this->getChildHtml('product'); ?>  
     </div>
 

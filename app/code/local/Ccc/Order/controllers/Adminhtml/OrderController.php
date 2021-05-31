@@ -24,6 +24,7 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
         $this->loadLayout()
             ->_setActiveMenu('order')
             ->_addBreadcrumb($this->__('Orders'), $this->__('View'));
+        $this->_initLayoutMessages('core/session');
         $this->_addContent($this->getLayout()->createBlock('order/adminhtml_order_view'));
         $this->renderLayout();
     }
@@ -34,11 +35,9 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
         $this->_title($this->__('Orders'));
         $this->loadLayout()
             ->_setActiveMenu('order');
-
+        $this->_initLayoutMessages('core/session');
         $block = $this->getLayout()->getBlock('cart');
-        /* echo "<pre>";
-        print_r(get_class( $block)); 
-        die; */ 
+        
         if ($cart) {
             $block->setCart($cart); 
 
@@ -62,6 +61,8 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
 
             if(array_key_exists('reset',$this->getRequest()->getPost())){
                 Mage::getSingleton('order/session')->unsCustomerId();
+                Mage::getSingleton('core/session')->addSuccess($this->__('Customer Remove successfully.'));
+
             }
             $this->_redirect('*/adminhtml_order/start');
         } catch (Exception $e) {
@@ -74,9 +75,10 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
     {
         $session = Mage::getSingleton('order/session'); 
         
-        if ($customerId) {
-            
+        if ($customerId) {            
             $session->setCustomerId($customerId);
+            Mage::getSingleton('core/session')->addSuccess($this->__('Customer Added successfully.'));
+
         } 
        
         $customerId = $session->getCustomerId();
@@ -104,13 +106,18 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
     public function addItemToCartAction()
     {
         try {
-            echo "<pre>";
             $productItems = $this->getRequest()->getPost('id');
-            //print_r($productItems);
+            if (empty($productItems)) {
+                Mage::getSingleton('core/session')->addError($this->__('Need to Add Product...'));
+                $this->_redirect('*/*/start');
+                return;
+            }
+            
             if (!$productItems) {
 
                 throw new Exception("Invalid Product...");
             }
+            
 
             $cart =  $this->getCart();
             $total = [];
@@ -122,7 +129,6 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
                     ->columns(['entity_id','price'=>'at_price.value','name'=>'at_name.value']);
                 $select = $productCollection->getSelect();
                 $product = $productCollection->getResource()->getReadConnection()->fetchRow($select); 
-                //
                 
                 $cartItem = Mage::getModel('order/cart_item');
                 $cartItem->cart_id = $cart['cart_id'];
@@ -131,15 +137,12 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
                 $cartItem->quantity = 1;
                 $cartItem->base_price = $product['price'];
                 $cartItem->price = $product['price'];
-                //$total[] = $product['price'];
                 $cartItem->discount = 0;
                 $cartItem->created_at = date('Y-m-d H:i:s');
-                print_r($cartItem);
                 $cartItem->save();
                 
             }
-            //$this->updateTotalCart($total);
-            
+            Mage::getSingleton('core/session')->addSuccess('Item Placed in cart successfully');
             $this->_redirect('*/adminhtml_order/start');
         } catch (Exception $e) {
             Mage::helper('order')->__($e);
@@ -153,8 +156,8 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
             $cartItem = Mage::getModel('order/cart_item')->load($id);
             if (!$cartItem->delete()) {
                 throw new Exception("Cannot Delete..");
-                
             }
+            Mage::getSingleton('core/session')->addSuccess($this->__('Item Deleted successfully.'));
             $this->_redirect('*/adminhtml_order/start');
         } catch (\Throwable $th) {
             Mage::getModel('order/session')->addException($th, $this->__($th));
@@ -189,7 +192,7 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
                 }
             
              } 
-        
+             Mage::getSingleton('core/session')->addSuccess($this->__('Item Updated successfully.'));
              $this->_redirect('*/adminhtml_order/start');
      
     }
@@ -240,12 +243,10 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
                 $customerShippingAddress->setCity($shippingingAddress['city']);
                 $customerShippingAddress->save();
             }
-            $this->_redirect('*/adminhtml_order/start');
+           
         } 
-
-        
-
-         
+        Mage::getSingleton('core/session')->addSuccess($this->__('Shipping Address Save successfully'));
+        $this->_redirect('*/adminhtml_order/start');
     }
 
     public function saveBillingAddressAction()
@@ -272,7 +273,7 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
             $customerBillingAddress->setCity($billingAddress['city']);
             $customerBillingAddress->save();
         }
-        
+        Mage::getSingleton('core/session')->addSuccess($this->__('Billing Address Save successfully'));
         $this->_redirect('*/adminhtml_order/start');
     }
 
@@ -281,12 +282,11 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
         echo "<pre>";
         $billingMethod = $this->getRequest()->getPost('paymentMethod');
         $billingMethod = explode('=>',$billingMethod);
-        /* print_r($billingMethod);
-        die;  */
         $cart = $this->getCart();
         $cart->	payment_method_code = $billingMethod[0];
         $cart->	payment_name = $billingMethod[1];
         $cart->save();
+        Mage::getSingleton('core/session')->addSuccess($this->__('Payment Method Set successfully'));
         $this->_redirect('*/adminhtml_order/start');
 
     }
@@ -303,6 +303,7 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
         $cart->setShippingAmount($shppingData[1]);
         $cart->setShippingName($shppingData[2]); 
         $cart->save();
+        Mage::getSingleton('core/session')->addSuccess($this->__('Shipping Method Set successfully'));
         $this->_redirect('*/adminhtml_order/start');
     }
 
@@ -328,7 +329,7 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
 
            $cart->delete();
         }
-        
+        Mage::getSingleton('core/session')->addSuccess($this->__('Ordered Placed Successfully'));
         $this->_redirect('*/adminhtml_order/index');
     }
 

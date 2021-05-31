@@ -8,6 +8,7 @@
     </order_adminhtml_order_index>
     <order_adminhtml_order_start>
         <reference name="content">
+            
             <block type="order/adminhtml_cart" name="cart" template="order/adminhtml/cart.phtml">
                 <block type="order/Adminhtml_Cart_Customer" name="customer_list" template="order/adminhtml/cart/customer.phtml"/>
                 <block type="order/Adminhtml_Cart_Product" name="product" template="order/adminhtml/cart/product.phtml"/>
