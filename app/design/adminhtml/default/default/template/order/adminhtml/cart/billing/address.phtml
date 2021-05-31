@@ -15,31 +15,31 @@
                                   <tr>
                                       <td>
                                           <input type="text" name="billing[address]" id="address" value="<?php if($cartBillingAddress->street){echo $cartBillingAddress->street;}if($cartBillingAddress->address){echo $cartBillingAddress->address;}?>"
-                                              placeholder="Address" class="form-control">
+                                              placeholder="Address" class="form-control" required>
                                       </td>
                                     </tr>  
                                     <tr>  
                                         <td>
                                           <input type=" text" name="billing[city]" id="lastname" value="<?php echo $cartBillingAddress->city?>"
-                                              placeholder="City" class="form-control">
+                                              placeholder="City" class="form-control" required>
                                         </td> 
                                   </tr>
                                   <tr>
                                       <td>
                                           <input type="text" name="billing[state]" id="state" value="<?php if($cartBillingAddress->region){echo $cartBillingAddress->region;}if($cartBillingAddress->state){echo $cartBillingAddress->state;}?>"
-                                              placeholder="State" class="form-control">
+                                              placeholder="State" class="form-control" required>
                                       </td>
                                   </tr>
                                   <tr>  
                                       <td>
                                           <input type="text" name="billing[zipcode]" id="zipcode" value="<?php if($cartBillingAddress->zipcode){echo $cartBillingAddress->zipcode;}if($cartBillingAddress->postcode){echo $cartBillingAddress->postcode;}?>"
-                                              placeholder="Zipcode" class="form-control">
+                                              placeholder="Zipcode" class="form-control" required>
                                       </td>
                                   </tr>
                                   <tr>
                                       <td>
                                       
-                                       <select id="country_name" name="billing[country]">
+                                       <select id="country_name" name="billing[country]" required>
                                             <option value="">Select Country</option>
                                             <?php foreach($countries as $key => $country):?>
                                                 <option name="country_name" value="<?php echo $country['country_id'];?>"
@@ -53,7 +53,7 @@
                                  <tr>
                                       <td>
                                       <input type="number" name="billing[phone]" id="phone" value="<?php if($cartBillingAddress->phone){echo $cartBillingAddress->phone;}if($cartBillingAddress->telephone){echo $cartBillingAddress->telephone;} ?>"
-                                              placeholder="Country" class="form-control">
+                                              placeholder="Country" class="form-control" required>
                                       </td>
                                  </tr>
                                   <tr>    

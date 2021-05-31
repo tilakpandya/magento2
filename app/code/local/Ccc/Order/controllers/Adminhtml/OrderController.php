@@ -147,13 +147,6 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
 
     }
 
-    /* public function updateTotalCart($total)
-    {
-        $cart = $this->getCart();
-        $cart->setTotal(array_sum($total));
-        $cart->save();
-        
-    } */
     public function deleteItemToCartAction($id)
     {
         try {
