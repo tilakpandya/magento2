@@ -1,13 +1,27 @@
 <?php
-    echo "<pre>";
-    //print_r($this->getShippingMethod());
-    foreach($this->getShippingMethod() as $_code => $_method){
-        // Get the first allowed method of this shipping carrier
-        /* $m = key($_method->getAllowedMethods()); 
-       echo  $shipping_method = $_code . '_' . $m."<br>"; */
-       print_r($_method->getAllowedMethods());
-       echo "<br>";
-      
-    }
-    die; 
+    $rates = $this->getShippingMethod();
+    //$cartShippingMethod = $this->getCart()->getShippingMethodCode();
+
 ?>
+<form action="<?php echo $this->getUrl('*/adminhtml_order/saveShippingMethod/');?>" Method="POST" id="cartForm">
+<?php echo $this->getBlockHtml('formkey');?>
+<table width="20%" heigth=20%>
+
+        <?php foreach ($rates as $carrier):?>
+            <?php foreach ($carrier as $rate):?>
+                <tr>
+                    <td><?=$rate->getData()['carrier_title']?></td>
+                    <td>$ <?= $rate->getData()['price']?></td>
+                    <td><input type="radio" value="<?=$rate->getData()['code']?>=><?=$rate->getData()['price']?>=><?=$rate->getData()['carrier_title']?>" 
+                        name="shippingMethod" <?php //if($rate->getData()['code'] == $this->getCart()->shipping_method_code){echo "Checked";}?>>
+                    
+                    </td>
+                </tr>
+                
+            <?php endforeach;?>       
+        <?php endforeach;?> 
+        <tr>
+                <td colspan=3><button type="submit" style="width:100px;height:25px">Submit</button> </td>
+        </tr> 
+    </table>  
+</form>    

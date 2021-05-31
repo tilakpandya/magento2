@@ -88,84 +88,25 @@ class Ccc_Order_Model_Cart extends Mage_Core_Model_Abstract
         return $this;
     }
 
-    public function getPaymentMethodId()
-    {
-        return $this->paymentMethodId;
-    }
-
-    public function setPaymentMethodId($paymentMethodId)
-    {
-        $this->paymentMethodId = $paymentMethodId;
-        return $this;
-    }
-
  
-    public function getShippingMethodId()
+    public function getItems()
     {
-        if (!$this->cartId) {
-            return false;
-        }
-        
-        $query = "SELECT * FROM `shipping` 
-        WHERE `id` = '{$this->cartId}'";
-
-        $shippingId= Mage::getModel('Model\Shipping')->fetchRow($query);
-        
-        $this->setShippingMethodId($shippingId);
-        return $this->shippingMethodId;
-    }
-
-    public function setShippingMethodId($shippingMethodId)
-    {
-        
-        $this->shippingMethodId = $shippingMethodId;
-
-        return $this;
-    }
-
-    public function addItem($product,$quantity=1,$addMode=false)
-    {
-        if (!$this->customerId) {
-            return false;
+        if ($this->item) {
+            return $this->item;
         }
 
-        $query = "SELECT * FROM `cart_item` WHERE `cartId` = '{$this->cartId}' AND `productId` = '{$product->id}'";
-        $cartItem = \Mage::getModel('Model\Cart\Item')->fetchRow($query);
-       
-        if ($cartItem) {
-            $cartItem->quantity += $quantity;
-            $cartItem->save();
-            return true;
-        }
-
-        $cartItem = \Mage::getModel('Model\Cart\Item');
-        $cartItem->cartId = $this->cartId;
-        $cartItem->productId = $product->id;
-        $cartItem->price = $product->price;
-        $cartItem->quantity = $quantity;
-        $cartItem->discount = $product->discount;
-        $cartItem->createdat = date('Y-m-d H:i:s');
-
-        $cartItem->save();
-        return true;
-    }
-
-
-    public function getShippingMethodAmount()
-    {
-        if ($this->shippingMethodAmount) {
-            return $this->shippingMethodAmount;
-         }
-         
-         $shippingMethodAmount =  \Mage::getModel('Model\shipping')->load($this->shippingMethodId);
-         $this->setShippingMethodAmount($shippingMethodAmount);
-         print_r($this->shippingMethodId);
+        $item = Mage::getModel('order/cart_item');
+        $itemCollection = $item->getCollection()->addFieldToFilter('cart_id',['eq'=>$this->cartId]);
+        $select = $itemCollection->getSelect();
         
+        $itemCollection = $itemCollection->getResource()->getReadConnection()->fetchAll($select);
+        
+        return $itemCollection;
     }
 
-    public function setShippingMethodAmount($shippingMethodAmount)
+    public function setItems($items)
     {
-        $this->shippingMethodAmount = $shippingMethodAmount;
+        $this->items = $items;
 
         return $this;
     }

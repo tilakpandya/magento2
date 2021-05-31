@@ -1,8 +1,8 @@
 <?php $customers = $this->getCustomers();
       $sessionCustomer = $this->getActiveCustomer();
-     /* echo "<pre>";
-       print_r($sessionCustomer); 
-       die;   */
+       /* echo "<pre>";
+       print_r($customers = $this->getCustomers()); 
+       die;  */
  ?>
 <div class="entry-edit-head"><h4>Customer</h4></div>
     <form action="<?php echo $this->getUrl('*/adminhtml_order/selectCustomer');?>" Method="POST" id="cartForm">
@@ -11,9 +11,9 @@
             <span class="nowrap" style="font-size:18px;">
             <label for="cars">Choose a customer:</label>
                 <select name="customer_id" id="customer_name" style="width:150px;height:30px">
-               
-                    <option value="select">--Select--</option> 
-                
+                    <?php if(!$sessionCustomer):?>
+                        <option>--Select--</option> 
+                    <?php endif;?>
                     <?php foreach ($customers as $key => $value):?>
                     <option value="<?= $value['entity_id']?>" <?php if($value['entity_id'] == $sessionCustomer){ echo "Selected";}?>><?= $value['firstName']?> <?= $value['lastName']?></option>  
                      <?php endforeach; ?>  
@@ -23,7 +23,7 @@
             
                 <button type="submit" class="button" title="Save Customer" style="width:100px;height:25px">Save</button>
             
-                <button type="button" class="button" title="reset Customer" style="width:100px;height:25px">Reset</button>
+                <button type="submit" name="reset" class="button" title="reset Customer" style="width:100px;height:25px">Reset</button>
         </fieldset>
     </form>    
 <script type="text/javascript">

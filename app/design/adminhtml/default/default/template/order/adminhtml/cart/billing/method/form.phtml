@@ -1,5 +1,35 @@
 
-<?php /*echo "<pre>";
-print_r($this->getPayemntMethodTitle()) */
+<?php 
+ $paymentMethod = $this->getPayemntMethodTitle();
+ //$cartPaymentMethod = $this->getCart()->getPaymentMethodCode();
+ $methods = [];
+ foreach ($paymentMethod as $key => $value) {
+    $methods[$value->getCode()] = $value->getTitle();
+ }
+ /* print_r($cartPaymentMethod);
+ die; */
 ?>
+
+<form action="<?php echo $this->getUrl('*/adminhtml_order/savePaymentMethod/');?>" Method="POST" id="cartForm">
+<?php echo $this->getBlockHtml('formkey');?>
+<table width="20%" heigth=20%>
+            
+            <?php foreach ($methods as $code=>$title):?>
+                
+                <tr>
+                    <td><?=$title?></td>
+                    <td><input type="radio" value="<?=$code?>=><?=$title?>" name="paymentMethod"
+                        <?php //if($code == $this->getCart()->payment_method_code()){echo "Checked";}?>>
+                    </td>
+                </tr>
+                
+            <?php endforeach;?>       
+        <tr>
+                <td colspan=3><button type="submit" style="width:100px;height:25px">Submit</button> </td>
+        </tr> 
+    </table>  
+</form>    
+
+
+
 

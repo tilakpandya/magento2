@@ -1,16 +1,39 @@
+<?php $total = $this->getTotal();
+$subtotal = [];
+
+    foreach ($total as $key => $value) {
+        
+      $subtotal[] = $value['price'] * $value['quantity'];
+    }
+$subtotal = array_sum($subtotal);
+$shippingAmount = $this->getCart()->getShippingAmount();
+$cod = $this->getCart()->getPaymentMethodCode();
+
+?>
+<?php if($this->getCart()):?>
 <div class="entry-edit-head"><h4>Total Price</h4></div>
 <fieldset class="a-center bold">
-    <span class="nowrap" style="">
+    <span class="nowrap">
+    <form action="<?php echo $this->getUrl('*/adminhtml_order/placeOrder/');?>" Method="POST" id="cartForm">
+    <?php echo $this->getBlockHtml('formkey');?>
         <table width="30%">
             <tr>
                 <td>Subtotal</td>
-                <td></td>
+                <td>$<?= $subtotal?> </td>
+            </tr>
+            <tr>
+                <td>shipping amount</td>
+                <td>$<?= $shippingAmount?> </td>
             </tr>
             <tr>
                 <td><h3>Grand total</h3></td>
-                <td></td>
+                <td><h3>$<?= $shippingAmount + $subtotal?></h3></td>
             </tr>
         </table>
-        <input type="submit" title="Save Order" style="width:100px;height:25px">             
+        <?php if($cod):?>
+        <button type="submit" style="width:150px;height:25px" id="shippingButton" name="shippingButton">Submit</button> 
+        <?php endif;?> 
     </span>
+    </form>
 </fieldset>
+<?php endif;?>               

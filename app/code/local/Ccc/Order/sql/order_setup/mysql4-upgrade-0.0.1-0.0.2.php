@@ -37,7 +37,22 @@ $table = $installer->getConnection()
     ))
     ->addColumn('same_as_billing', Varien_Db_Ddl_Table::TYPE_TINYINT, null, array(
         'nullable' => true,
-    ));
+    ))
+    ->addColumn('phone', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
+        'nullable' => false,
+    ))
+
+    ->addForeignKey(
+        $installer->getFkName(
+            'order/cart_item',
+            'address_id',
+            'customer/address_entity',
+            'entity_id'
+        ),
+        'address_id', $installer->getTable('customer/address_entity'), 'entity_id',
+        Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE);
+
+        
     
 
 
@@ -52,7 +67,7 @@ $installer->startSetUp();
 //Table Order
 $orderTable = $installer->getConnection()
     ->newTable($installer->getTable('order/cart_item'))
-    ->addColumn('cart_item_id',Varien_Db_Ddl_Table::TYPE_SMALLINT,null,array(
+    ->addColumn('item_id',Varien_Db_Ddl_Table::TYPE_SMALLINT,null,array(
         'unsigned' => true,
         'nullable' => false,
         'primary' => true,
@@ -78,27 +93,7 @@ $orderTable = $installer->getConnection()
     ))
     ->addColumn('created_at',  Varien_Db_Ddl_Table::TYPE_DATETIME, null, array(
         'nullable' => false,
-    ))
-
-    ->addForeignKey(
-        $installer->getFkName(
-            'order/cart_item',
-            'product_id',
-            'catalog/product',
-            'entity_id'
-        ),
-        'product_id', $installer->getTable('catalog/product'), 'entity_id',
-        Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
-
-        ->addForeignKey(
-            $installer->getFkName(
-                'order/cart_item',
-                'cart_id',
-                'order/cart',
-                'cart_id'
-            ),
-            'cart_id', $installer->getTable('order/cart'), 'cart_id',
-            Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE);
+    ));
             
 $installer->getConnection()->createTable($orderTable);
 

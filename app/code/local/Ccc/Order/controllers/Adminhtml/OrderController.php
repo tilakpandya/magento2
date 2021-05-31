@@ -17,31 +17,52 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
         $this->renderLayout();
     }
 
+    public function viewAction()
+    {
+        
+        $this->_title($this->__('Orders'));
+        $this->loadLayout()
+            ->_setActiveMenu('order')
+            ->_addBreadcrumb($this->__('Orders'), $this->__('View'));
+        //$this->_addContent($this->getLayout()->createBlock('order/adminhtml_order_view'));
+        $this->renderLayout();
+    }
+
     public function startAction()
     {
         $cart = $this->getCart();
         $this->_title($this->__('Orders'));
         $this->loadLayout()
-            ->_setActiveMenu('order')
-            ->_addBreadcrumb($this->__('Orders'), $this->__('Orders'));    
+            ->_setActiveMenu('order');
+
         $block = $this->getLayout()->getBlock('cart');
-		$block->setCart($cart); 
-        $this->renderLayout();
+        /* echo "<pre>";
+        print_r(get_class( $block)); 
+        die; */ 
+        if ($cart) {
+            $block->setCart($cart); 
+
+        } 
+        $this->renderLayout(); 
     }
 
     public function selectCustomerAction()
     {
         try {
-            $customerId = $this->getRequest()->getPost('customer_id');
-
+            echo "<pre>";
+            
+           $customerId = $this->getRequest()->getPost('customer_id');
+            
             if ($customerId <= 0) {
                throw new Exception("Invalid Customer...");
-            }
-
+            }               
             if ($customerId != 'Select') {
                 $this->getCart($customerId);
             }
-                    
+
+            if(array_key_exists('reset',$this->getRequest()->getPost())){
+                Mage::getSingleton('order/session')->unsCustomerId();
+            }
             $this->_redirect('*/adminhtml_order/start');
         } catch (Exception $e) {
             Mage::helper('order')->__($e);
@@ -75,6 +96,7 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
 
     public function unsetCustomerAction()
     {
+        echo 111;die;
         Mage::getSingleton('order/session')->unsCustomerId();
         $this->_redirect('*/adminhtml_order/start');
     }
@@ -91,7 +113,7 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
             }
 
             $cart =  $this->getCart();
-
+            $total = [];
             foreach ($productItems as $id => $value) {
                 $productCollection = Mage::getModel('catalog/product')->getCollection();
                 $productCollection->addAttributeToSelect(['entity_id','name','price'],'inner');
@@ -100,20 +122,24 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
                     ->columns(['entity_id','price'=>'at_price.value','name'=>'at_name.value']);
                 $select = $productCollection->getSelect();
                 $product = $productCollection->getResource()->getReadConnection()->fetchRow($select); 
-                //print_r($product);
-
+                //
+                
                 $cartItem = Mage::getModel('order/cart_item');
                 $cartItem->cart_id = $cart['cart_id'];
                 $cartItem->product_id = $product['entity_id'];
+                $cartItem->product_name = $product['name'];
                 $cartItem->quantity = 1;
                 $cartItem->base_price = $product['price'];
                 $cartItem->price = $product['price'];
+                //$total[] = $product['price'];
                 $cartItem->discount = 0;
                 $cartItem->created_at = date('Y-m-d H:i:s');
-                $cartItem->save();
                 print_r($cartItem);
+                $cartItem->save();
                 
             }
+            //$this->updateTotalCart($total);
+            
             $this->_redirect('*/adminhtml_order/start');
         } catch (Exception $e) {
             Mage::helper('order')->__($e);
@@ -121,6 +147,13 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
 
     }
 
+    /* public function updateTotalCart($total)
+    {
+        $cart = $this->getCart();
+        $cart->setTotal(array_sum($total));
+        $cart->save();
+        
+    } */
     public function deleteItemToCartAction($id)
     {
         try {
@@ -248,7 +281,144 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
         }
         
         $this->_redirect('*/adminhtml_order/start');
+    }
+
+    public function savePaymentMethodAction()
+    {
+        echo "<pre>";
+        $billingMethod = $this->getRequest()->getPost('paymentMethod');
+        $billingMethod = explode('=>',$billingMethod);
+        /* print_r($billingMethod);
+        die;  */
+        $cart = $this->getCart();
+        $cart->	payment_method_code = $billingMethod[0];
+        $cart->	payment_name = $billingMethod[1];
+        $cart->save();
+        $this->_redirect('*/adminhtml_order/start');
 
     }
 
+    public function saveShippingMethodAction()
+    {
+        echo "<pre>";
+        $shppingData = $this->getRequest()->getPost('shippingMethod');
+        
+        $shppingData = explode('=>',$shppingData);
+        
+        $cart = $this->getCart();
+        $cart->setShippingMethodCode($shppingData[0]);
+        $cart->setShippingAmount($shppingData[1]);
+        $cart->setShippingName($shppingData[2]); 
+        $cart->save();
+        $this->_redirect('*/adminhtml_order/start');
+    }
+
+    public function placeOrderAction()
+    {
+        echo "<pre>";
+        $cart= $this->getCart();
+        $order = Mage::getModel('order/order');
+        $orderItem = Mage::getModel('order/order_item');
+        $orderAddress = Mage::getModel('order/order_address');
+        
+        if ($order) {
+            $this->setOrder($order);
+        } 
+        if ($orderAddress) {
+            $this->setOrderAddress();
+        } 
+        if ($orderItem) {
+            $this->setOrderItem();
+        }
+ 
+        if ($order->load($cart->getCustomer()->getId(),'customer_id')) {
+
+           $cart->delete();
+        }
+        
+        $this->_redirect('*/adminhtml_order/index');
+    }
+
+    public function setOrder($order)
+    {
+        $cart = $this->getCart();
+        $customer = $cart->getCustomer();
+      
+        $order->customer_id = $customer->getId();
+        $order->customer_name = $customer->getFirstname().' '.$customer->getLastname();
+        $order->customer_email = $customer->getEmail();
+        $order->shipping_name = $cart->getShippingName();
+        $order->shipping_code = $cart->getShippingMethodCode();
+        $order->shipping_charge = $cart->getShippingAmount();
+        $order->shipping_amount = $cart->getShippingAmount();
+        $order->payment_code = $cart->getPaymentMethodCode();
+        $order->payment_name = $cart->getPaymentName();
+        $order->save();
+    }
+
+    public function setOrderItem()
+    {
+        
+        $cart = $this->getCart();
+        $cartItem = $cart->getItems();
+        $orderId = Mage::getModel('order/order')->load($cart->getCustomerId(),'customer_id')->getOrderId();
+        foreach ($cartItem as $key => $item) {
+            $cartItem = Mage::getModel('order/cart_item')->load($item['item_id']);
+            $order = Mage::getModel('order/order_item');
+            $order->order_id = $orderId;
+            $order->product_name = $item['product_name'];
+            $order->product_id = $item['product_id'];
+            $order->quantity = $item['quantity'];
+            $order->base_price = $item['base_price'];
+            $order->price = $item['price'];
+            $order->discount = $item['discount']; 
+            $order->created_at = date('Y-m-d H:i:s');
+            $order->save();
+            $cartItem->delete();
+        }
+    }
+
+    public function setOrderAddress()
+    {
+        $cart = $this->getCart();
+        $orderId = Mage::getModel('order/order')->load($cart->getCustomerId(),'customer_id')->getOrderId();
+        
+        $cartBillingAddress = $cart->getBillingAddress();
+        $cartShippingAddress = $cart->getShippingAddress();
+        
+        if ($cartBillingAddress->getId()) {
+            $orderAddress = Mage::getModel('order/order_address');
+            $orderAddress->order_id = $orderId;
+            $orderAddress->address_id = $cartBillingAddress->getAddressId();
+            $orderAddress->address = $cartBillingAddress->getAddress();
+            $orderAddress->city = $cartBillingAddress->getCity();
+            $orderAddress->address_type = 'Billing';
+            $orderAddress->state= $cartBillingAddress->getState();
+            $orderAddress->Country = $cartBillingAddress->getCountry();
+            $orderAddress->zipcode = $cartBillingAddress->getZipcode();
+            $orderAddress->phone = $cartBillingAddress->getPhone();
+            $orderAddress->save();
+
+            $cartBillingAddress->delete();
+
+        }
+
+        if ($cartShippingAddress->getId()) {
+            $orderAddress = Mage::getModel('order/order_address');
+            $orderAddress->order_id = $orderId;
+            $orderAddress->address_id = $cartShippingAddress->getAddressId();
+            $orderAddress->address = $cartShippingAddress->getAddress();
+            $orderAddress->city = $cartShippingAddress->getCity();
+            $orderAddress->address_type = 'Shipping';
+            $orderAddress->state= $cartShippingAddress->getState();
+            $orderAddress->Country = $cartShippingAddress->getCountry();
+            $orderAddress->zipcode = $cartShippingAddress->getZipcode();
+            $orderAddress->phone = $cartShippingAddress->getPhone();
+            $orderAddress->save();
+
+            $cartShippingAddress->delete();
+        } 
+       /*  print_r($cartBillingAddress);
+        die; */
+    }
 }

@@ -4,13 +4,14 @@ $installer = $this;
 $installer->startSetup();
 
 $installer->run("
-ALTER TABLE `cart_address` ADD `phone` varchar(15) NOT NULL"
-);
+ALTER TABLE `order`
+MODIFY  customer_name text");
 $installer->endSetup();
 
 $installer->startSetup();
-
 $installer->run("
-ALTER TABLE `order_address` ADD `phone` varchar(15) NOT NULL"
-);
+ALTER TABLE `order`
+MODIFY  customer_email text");
 $installer->endSetup();
+
+

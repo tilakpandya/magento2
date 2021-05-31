@@ -1,0 +1,225 @@
+<?php
+$customer = $this->getCustomer();
+$item = $this->getItem();
+$billingAddress = $this->getBillingAddress();
+$shippingAddress = $this->getShippingAddress();
+$total = $this->total();
+ 
+?>
+<table width='100%'>
+    <tr>
+        <td>
+            <div class="entry-edit">
+                <div class="entry-edit-head">
+                    <h4 class="icon-head head-account">Account Information</h4>
+                    <div class="tools"></div>
+                </div>
+                <div class="fieldset">
+                    <div class="hor-scroll">
+                        <table cellspacing="0" class="form-list">
+                            <tbody>
+                                <tr>
+                                    <td class="label"><label>Customer Name</label></td>
+                                    <td class="value">
+                                        <?= $customer->getCustomerName(); ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label"><label>Email</label></td>
+                                    <td class="value"><a href="mailto:tilakpandya2@gmail.com"><strong><?= $customer->getCustomerEmail(); ?></strong></a></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="entry-edit">
+                <div class="entry-edit-head">
+                    <h4 class="icon-head head-account">Shipping and Payment Information</h4>
+                    <div class="tools"></div>
+                </div>
+                <div class="fieldset">
+                    <div class="hor-scroll">
+                        <table cellspacing="0" class="form-list">
+                            <tbody>
+                                <tr>
+                                    <td class="label"><label>Shipping Method</label></td>
+                                    <td class="value">
+                                        <?= $customer->getShippingName(); ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label"><label>Payment Method</label></td>
+                                    <td class="value"><strong><?= $customer->getPaymentName(); ?></strong></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan=2>
+            <div class="entry-edit">
+                <div class="entry-edit-head">
+                    <h4 class="icon-head head-account">Ordered Item Information</h4>
+                    <div class="tools"></div>
+                </div>
+                <div class="grid np">
+                    <div class="hor-scroll">
+                        <table cellspacing="0" class="data order-tables">
+                            <colgroup>
+                                <col>
+                                <col width="1">
+                                <col width="1">
+                                <col width="1">
+                                <col width="1">
+                                <col width="1">
+                                <col width="1">
+                                <col width="1">
+                                <col width="1">
+                                <col width="1">
+                            </colgroup>
+                            <thead>
+                                <tr class="headings">
+                                    <th>Product</th>
+                                    <th><span class="nobr">Item Status</span></th>
+                                    <th><span class="nobr">Base Price</span></th>
+                                    <th>Price</th>
+                                    <th class="a-center">Qty</th>
+                                    <th>Subtotal</th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="even">
+                                <?php foreach ($item as $key => $value) : ?>
+                                    <tr class="border">
+                                        <td>
+                                            <div id="order_item_1" class="item-container">
+                                                <div class="item-text">
+
+                                                    <h5 class="title"><span id="order_item_1_title"><?= $value['product_name'] ?></span></h5>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="a-center">Ordered</td>
+                                        <td class="a-right"><span class="price">$<?= $value['base_price'] ?></span></td>
+                                        <td class="a-right">
+                                            <span class="price-excl-tax">
+
+                                                <span class="price">$<?= $value['price'] ?></span>
+
+                                            </span>
+                                            <br>
+
+                                        </td>
+                                        <td>
+                                            <strong><?= $value['quantity'] ?></strong>
+                                        </td>
+
+                                        <td class="a-right">
+                                            <span class="price-excl-tax">
+
+                                                <span class="price">$<?= $value['price'] ?></span>
+
+                                            </span>
+                                            <br>
+                                        </td>
+
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </td>
+
+    </tr>
+    <tr>
+        <td>
+            <div class="entry-edit">
+                <div class="entry-edit-head">
+                    <h4 class="icon-head head-billing-address">Billing Address</h4>
+                </div>
+                <fieldset>
+                    <address><?= $customer->getCustomerName(); ?><br>
+
+                        <?= $billingAddress->getAddress(); ?><br>
+                        <?= $billingAddress->getCity(); ?>, <?= $billingAddress->getState(); ?>, <?= $billingAddress->getZipcode(); ?><br>
+                        <?= $billingAddress->getCountry(); ?><br>
+                        T: <?= $billingAddress->getPhone(); ?>
+
+                    </address>
+                </fieldset>
+            </div>
+        </td>
+        <td>
+            <div class="entry-edit">
+                <div class="entry-edit-head">
+                    <h4 class="icon-head head-billing-address">shipping Address</h4>
+                </div>
+                <fieldset>
+                    <address><?= $customer->getCustomerName(); ?><br>
+
+                        <?= $shippingAddress->getAddress(); ?><br>
+                        <?= $shippingAddress->getCity(); ?>, <?= $shippingAddress->getState(); ?>, <?= $shippingAddress->getZipcode(); ?><br>
+                        <?= $shippingAddress->getCountry(); ?><br>
+                        T: <?= $shippingAddress->getPhone(); ?>
+
+                    </address>
+                </fieldset>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan=2>
+            <div class="box-right entry-edit">
+                <div class="entry-edit-head">
+                    <h4>Order Totals</h4>
+                </div>
+                <div class="order-totals">
+                    <table cellspacing="0" width="100%">
+                        <colgroup>
+                            <col>
+                            <col width="1">
+                        </colgroup>
+                        <tfoot>
+                            <tr class="0">
+                                <td class="label">
+                                    <strong>Grand Total</strong>
+                                </td>
+                                <td class="emph">
+                                    <strong><span class="price">$<?= $total + $customer->getShippingAmount() ?></span></strong>
+                                </td>
+                            </tr>
+                            
+                        </tfoot>
+
+                        <tbody>
+                            <tr class="0">
+                                <td class="label">
+                                    Subtotal </td>
+                                <td>
+                                    <span class="price"><?= $total ?></span>
+                                </td>
+                            </tr>
+                            <tr class="1">
+                                <td class="label">
+                                    Shipping &amp; Handling </td>
+                                <td>
+                                    <span class="price"><?= $customer->getShippingAmount() ?></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>

@@ -1,9 +1,7 @@
 <?php 
     $customerId = Mage::getSingleton('order/session')->getCustomerId();
     $cart = $this->getCart();
-    /* echo "<pre>";
-       print_r($this->getPayment()); 
-       die;  */ 
+     
  ?>
     <?php echo $this->getBlockHtml('formkey');?>
     
@@ -51,25 +49,53 @@
     </div>
 
     <div class="entry-edit">
-        <div class="entry-edit-head"><h4>Payment Shippment</h4></div>
+        <div class="entry-edit-head"><h4>Payment Shippment Methods</h4></div>
             <fieldset class="a-center bold">
             <span class="nowrap">
-                <table width="100%" class="table-class">
-                    <tr>
-                        <td>                            
-                            <?php echo $this->getChildHtml('shipping_method') ?>
-                        </td>
-                        <td>
-                            <?php echo $this->getChildHtml('billing_method') ?>
-                        </td>
-                    </tr>
-                </table>  
+            <center> 
+            <table width="70%" class="table-class">
+                <?php if($this->getCart()->getBillingAddress()->getId()):?>
+                    <?php if($this->getCart()->getShippingAddress()->getId()):?>
+                        <tr>
+                            <th><h2>Shipping Method</h2></th>
+                            <th><h2>Billing Method</h2></th>
+                        </tr>
+                        <tr>
+                            <td>                            
+                                <?php echo $this->getChild('shipping_method')->setCart($cart)->toHtml(); ?>
+                            </td>
+                            <td>
+                                <?php echo $this->getChild('billing_method')->setCart($cart)->toHtml(); ?>
+                            </td>
+                        </tr>
+                    <?php endif;?> 
+                    <?php if($this->getCart()->getBillingAddress()->getSameAsBilling()):?>
+                        <tr>
+                            <th><h2>Shipping Method</h2></th>
+                            <th><h2>Billing Method</h2></th>
+                        </tr>
+                        <tr>
+                            <td>                            
+                                <?php echo $this->getChildHtml('shipping_method') ?>
+                            </td>
+                            <td>
+                                <?php echo $this->getChildHtml('billing_method') ?>
+                            </td>
+                        </tr> 
+                    <?php endif;?> 
+                <?php else:?>
+                        <tr>
+                                <td>Please Select or Fill and Submit Above Information...</td>
+                        </tr>
+                <?php endif;?> 
+            </table> 
+            </center>
             </span>
         </fieldset>
     </div>
 
     <div class="entry-edit">
-        <?php echo $this->getChildHtml('total') ?>
+        <?php echo $this->getChild('total')->setCart($cart)->toHtml(); ?>
     </div>
 
     <script>

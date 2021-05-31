@@ -2,20 +2,23 @@
     $cartShippingAddress = $this->getShippingAddress();
     $countries = $this->getCountryName();
     $sameAsBilling = $this->getSameAsBilling();
-    /* echo "<pre>";
-    print_r( $sameAsBilling);
+  /*  echo "<pre>";
+    print_r( $this->getCart()->getBillingAddress()->getId());
     die; */
 
 ?>
 <form action="<?php echo $this->getUrl('*/adminhtml_order/saveShippingAddress/');?>" Method="POST" id="cartForm">
     <?php echo $this->getBlockHtml('formkey');?>
     <table class="table">
+                                <?php if($this->getCart()->getBillingAddress()->getId()):?>
+
                                   <tr>
                                       <td colspan="2">
                                           Same as Billing Address : &nbsp<input type="checkbox" name="sameasbilling"class="form-check-input" id="sameasbilling" onclick="myCheckbox();"
                                           <?php if ($sameAsBilling){echo "Checked";}?> >
                                       </td>
                                   </tr>
+                                <?php endif;?>  
                                   <tr>
                                       <td>
                                           <input type="text" name="shipping[address]" id="shippingAddress" value="<?php if($cartShippingAddress->street){echo $cartShippingAddress->street;}if($cartShippingAddress->address){echo $cartShippingAddress->address;}?>"

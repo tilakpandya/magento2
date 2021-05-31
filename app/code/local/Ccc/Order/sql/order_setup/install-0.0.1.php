@@ -27,22 +27,22 @@ $table = $installer->getConnection()
         'unsigned' => true,
         'nullable' => false,
     ))
-    ->addColumn('shippingMethod_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
+    ->addColumn('shipping_method_code', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
         'unsigned' => true,
         'nullable' => false,
     ))
-    ->addColumn('shippingAmount', Varien_Db_Ddl_Table::TYPE_DECIMAL, null, array(
+    ->addColumn('shipping_amount', Varien_Db_Ddl_Table::TYPE_DECIMAL, null, array(
         'unsigned' => true,
         'nullable' => false,
     ))
-    ->addColumn('paymentMethod_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
+    ->addColumn('payment_method_code', Varien_Db_Ddl_Table::TYPE_TEXT, null, array(
         'unsigned' => true,
         'nullable' => false,
     ))
     ->addColumn('created_at', Varien_Db_Ddl_Table::TYPE_DATETIME, null, array(
         'unsigned' => true,
         'nullable' => false,
-    ));
+    ));    
 
 $installer->getConnection()->createTable($table);
 
@@ -71,9 +71,6 @@ $orderTable = $installer->getConnection()
     ->addColumn('customer_email',Varien_Db_Ddl_Table::TYPE_SMALLINT,null,array(
         'nullable' => false,
     ),'Customer Email')
-    ->addColumn('shipping_id',Varien_Db_Ddl_Table::TYPE_INTEGER,null,array(
-        'nullable' => true
-    ),'Shipping id')
     ->addColumn('shipping_name',Varien_Db_Ddl_Table::TYPE_VARCHAR,null,array(
         'nullable' => false
     ),'Shipping Name')
@@ -86,15 +83,13 @@ $orderTable = $installer->getConnection()
     ->addColumn('shipping_amount',Varien_Db_Ddl_Table::TYPE_DECIMAL,null,array(
         'nullable' => false
     ),'Shipping amount')
-    ->addColumn('payment_id',Varien_Db_Ddl_Table::TYPE_INTEGER,null,array(
+    ->addColumn('payment_code',Varien_Db_Ddl_Table::TYPE_TEXT,null,array(
         'nullable' => true
     ),'payment id')
     ->addColumn('payment_name',Varien_Db_Ddl_Table::TYPE_VARCHAR,null,array(
         'nullable' => false
     ),'Payment Name')
-    ->addColumn('status',Varien_Db_Ddl_Table::TYPE_SMALLINT,null,array(
-        'nullable' => false
-    ),'staus')
+    
     ->addForeignKey(
         $installer->getFkName(
             'order/order',

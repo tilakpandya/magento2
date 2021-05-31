@@ -1,9 +1,10 @@
 <?php
-
 class Ccc_Order_Block_Adminhtml_Cart extends Mage_Core_Block_Template
 {
     protected $billingAddress = null;
     protected $shippingAddress = null;
+    protected $cart = null;
+
 
     public function __construct()
     {
@@ -11,7 +12,7 @@ class Ccc_Order_Block_Adminhtml_Cart extends Mage_Core_Block_Template
         $this->_controller = 'adminhtml_cart';
         $this->_blockGroup = 'order';
         $this->_headerText = $this->__('Cart');
-        //$this->setTemplate('order/adminhtml/cart.phtml');
+        $this->setTemplate('order/adminhtml/cart.phtml');
     }    
 
     public function getBillingAddres()
@@ -49,4 +50,16 @@ class Ccc_Order_Block_Adminhtml_Cart extends Mage_Core_Block_Template
         $address = $addressCollection->getFirstItem();
         return $address;    
     }
+
+    public function setCart(Ccc_Order_Model_Cart $cart) {
+		$this->cart = $cart;
+		return $this;
+	}
+
+	public function getCart() {
+		if(!$this->cart) {
+			return false;
+		}
+		return $this->cart;
+	}
 }

@@ -25,7 +25,7 @@ class Ccc_Order_Model_Demo extends Mage_Shipping_Model_Carrier_Abstract implemen
         $rate->setMethod('standand');
         $rate->setMethodTitle('Standard');
 
-        $rate->setPrice(4.99);
+        $rate->setPrice(8);
         $rate->setCost(0);
 
         return $rate;

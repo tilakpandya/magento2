@@ -33,49 +33,43 @@ class Ccc_Order_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Block_Widget_G
     {
 
         $this->addColumn('order_id', array(
-            'header'=> Mage::helper('sales')->__('Order #'),
+            'header'=> Mage::helper('order')->__('Order #'),
             'width' => '80px',
             'type'  => 'text',
             'index' => 'increment_id',
         ));
 
 
+        $this->addColumn('customer_name', array(
+            'header' => Mage::helper('order')->__('Customer Name'),
+            'index' => 'customer_name',
+        ));
+
+        $this->addColumn('customer_email', array(
+            'header' => Mage::helper('order')->__('Customer Email'),
+            'index' => 'customer_email',
+            
+        ));
+
         $this->addColumn('shipping_name', array(
-            'header' => Mage::helper('sales')->__('Ship to Name'),
+            'header' => Mage::helper('order')->__('Shipping Name'),
             'index' => 'shipping_name',
         ));
 
-        $this->addColumn('base_grand_total', array(
-            'header' => Mage::helper('sales')->__('G.T. (Base)'),
-            'index' => 'base_grand_total',
-            'type'  => 'currency',
-            'currency' => 'base_currency_code',
-        ));
-
-        $this->addColumn('grand_total', array(
-            'header' => Mage::helper('sales')->__('G.T. (Purchased)'),
-            'index' => 'grand_total',
-            'type'  => 'currency',
-            'currency' => 'order_currency_code',
-        ));
-
-        $this->addColumn('status', array(
-            'header' => Mage::helper('sales')->__('Status'),
-            'index' => 'status',
-            'type'  => 'options',
-            'width' => '70px',
-            'options' => Mage::getSingleton('sales/order_config')->getStatuses(),
+        $this->addColumn('payment_name', array(
+            'header' => Mage::helper('order')->__('payment name'),
+            'index' => 'payment_name',
         ));
 
             $this->addColumn('action',
                 array(
-                    'header'    => Mage::helper('sales')->__('Action'),
+                    'header'    => Mage::helper('order')->__('Action'),
                     'width'     => '50px',
                     'type'      => 'action',
                     'getter'     => 'getId',
                     'actions'   => array(
                         array(
-                            'caption' => Mage::helper('sales')->__('View'),
+                            'caption' => Mage::helper('order')->__('View'),
                             'url'     => array('base'=>'*/adminhtml_order/view'),
                             'field'   => 'order_id',
                             'data-column' => 'action',
@@ -87,10 +81,10 @@ class Ccc_Order_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Block_Widget_G
                     'is_system' => true,
             ));
         
-        $this->addRssList('rss/order/new', Mage::helper('sales')->__('New Order RSS'));
+        $this->addRssList('rss/order/new', Mage::helper('order')->__('New Order RSS'));
 
-        $this->addExportType('*/*/exportCsv', Mage::helper('sales')->__('CSV'));
-        $this->addExportType('*/*/exportExcel', Mage::helper('sales')->__('Excel XML'));
+        $this->addExportType('*/*/exportCsv', Mage::helper('order')->__('CSV'));
+        $this->addExportType('*/*/exportExcel', Mage::helper('order')->__('Excel XML'));
 
         return parent::_prepareColumns();
     }
