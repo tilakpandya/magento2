@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Ccc_Chat>
+      <version>0.0.1</version>
+    </Ccc_Chat>
+  </modules>
+  
+  <global>
+    <helpers>
+      <chat>
+        <class>Ccc_Chat_Helper</class>
+      </chat>
+    </helpers>
+
+    <blocks>
+      <chat>
+        <class>Ccc_Chat_Block</class>
+      </chat>
+	  </blocks>
+
+    <models>
+          
+            <chat>
+                <class>Ccc_Chat_Model</class>
+                <resourceModel>chat_resource</resourceModel>
+            </chat>   
+           <chat_resource>
+                <class>Ccc_Chat_Model_Resource</class>
+                <entities>
+                 <chat>
+                    <table>chat</table>
+                  </chat>              
+                </entities>
+            </chat_resource>
+    </models>
+
+    <resources>
+			 <chat_setup>
+				 <setup>
+				    <module>Ccc_Chat</module>
+				 </setup>
+			 </chat_setup>
+		</resources>
+  </global>
+
+<admin>
+		<routers>
+			<chat>
+				<use>admin</use>
+				<args>
+					<module>Ccc_Chat</module>
+          <frontName>chat</frontName>
+				</args>
+			</chat>
+		</routers>
+</admin>
+
+<adminhtml> 
+  <layout>
+      <updates>
+        <chat>
+            <file>chat.xml</file>
+        </chat>
+      </updates>
+	</layout>
+</adminhtml>
+
+</config>

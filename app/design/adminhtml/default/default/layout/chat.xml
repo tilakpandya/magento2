@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<layout>
+    <chat_adminhtml_chat_index>
+        <reference name="head">
+            <action method="addJs"><script>chat/jQuery.js</script></action>
+        </reference>
+        <reference name="content">
+            <block type="chat/adminhtml_chat" name="chat" template="chat/adminhtml/chat.phtml">
+                <block type="chat/adminhtml_rows" name="rows" template="chat/adminhtml/rows.phtml"/>
+            </block>
+        </reference>
+    </chat_adminhtml_chat_index>
+    
+</layout>

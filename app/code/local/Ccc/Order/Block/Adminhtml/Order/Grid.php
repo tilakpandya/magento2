@@ -36,7 +36,7 @@ class Ccc_Order_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Block_Widget_G
             'header'=> Mage::helper('order')->__('Order #'),
             'width' => '80px',
             'type'  => 'text',
-            'index' => 'increment_id',
+            'index' => 'order_id',
         ));
 
 
@@ -56,9 +56,9 @@ class Ccc_Order_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Block_Widget_G
             'index' => 'shipping_name',
         ));
 
-        $this->addColumn('payment_name', array(
-            'header' => Mage::helper('order')->__('payment name'),
-            'index' => 'payment_name',
+        $this->addColumn('status', array(
+            'header' => Mage::helper('order')->__('Order Status'),
+            'index' => 'status',
         ));
 
             $this->addColumn('action',
@@ -104,22 +104,7 @@ class Ccc_Order_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Block_Widget_G
              'confirm' => Mage::helper('order')->__('Are you sure?')
         ));
 
-        $statuses = Mage::getSingleton('order/order_status')->getOptionArray();
-
-        array_unshift($statuses, array('label'=>'', 'value'=>''));
-        $this->getMassactionBlock()->addItem('status', array(
-             'label'=> Mage::helper('order')->__('Change status'),
-             'url'  => $this->getUrl('*/*/massStatus', array('_current'=>true)),
-             'additional' => array(
-                    'visibility' => array(
-                         'name' => 'status',
-                         'type' => 'select',
-                         'class' => 'required-entry',
-                         'label' => Mage::helper('catalog')->__('Status'),
-                         'values' => $statuses
-                     )
-             )
-        ));
+        
         Mage::dispatchEvent('adminhtml_catalog_product_grid_prepare_massaction', array('block' => $this));
 
         return $this;

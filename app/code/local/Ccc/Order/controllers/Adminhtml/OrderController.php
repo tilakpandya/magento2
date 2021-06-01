@@ -1,6 +1,7 @@
 <?php
 class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Action
 {
+    protected $total = []; 
     protected function _construct()
     {
         $this->setUsedModuleName('Mage_Sales');
@@ -107,6 +108,9 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
     {
         try {
             $productItems = $this->getRequest()->getPost('id');
+            $cart =  $this->getCart();
+            $total = [];
+
             if (empty($productItems)) {
                 Mage::getSingleton('core/session')->addError($this->__('Need to Add Product...'));
                 $this->_redirect('*/*/start');
@@ -117,10 +121,7 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
 
                 throw new Exception("Invalid Product...");
             }
-            
 
-            $cart =  $this->getCart();
-            $total = [];
             foreach ($productItems as $id => $value) {
                 $productCollection = Mage::getModel('catalog/product')->getCollection();
                 $productCollection->addAttributeToSelect(['entity_id','name','price'],'inner');
@@ -136,11 +137,16 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
                 $cartItem->product_name = $product['name'];
                 $cartItem->quantity = 1;
                 $cartItem->base_price = $product['price'];
+                $this->total[] = $product['price'];
                 $cartItem->price = $product['price'];
                 $cartItem->discount = 0;
                 $cartItem->created_at = date('Y-m-d H:i:s');
                 $cartItem->save();
                 
+            }
+            if (!empty($this->total)) {
+                $cart->total = array_sum($this->total);
+                $cart->save();
             }
             Mage::getSingleton('core/session')->addSuccess('Item Placed in cart successfully');
             $this->_redirect('*/adminhtml_order/start');
@@ -150,12 +156,20 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
 
     }
 
-    public function deleteItemToCartAction($id)
+    public function deleteItemAction($id)
     {
         try {
             $cartItem = Mage::getModel('order/cart_item')->load($id);
+            $basePrice = $cartItem->getBasePrice();
+            $cart = $this->getCart();
+            $cartTotal = $cart->getTotal();
+            $cart->total = $cartTotal - $basePrice;
+            
             if (!$cartItem->delete()) {
                 throw new Exception("Cannot Delete..");
+            }
+            if (!$cart->save()) {
+                throw new Exception("Cannot Modify Total..");
             }
             Mage::getSingleton('core/session')->addSuccess($this->__('Item Deleted successfully.'));
             $this->_redirect('*/adminhtml_order/start');
@@ -168,34 +182,53 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
 
     public function updateItemToCartAction()
     {
-
-            $qtyItems = $this->getRequest()->getPost('quantity');
+            try {
+                $Items = $this->getRequest()->getPost('quantity');
+            $cartItem = $this->getCart()->getItems();
+            $total = [];
+            $cart = $this->getCart();
             $delete = $this->getRequest()->getPost('delete');
-            if ($delete) {
-                $this->deleteItemToCartAction($delete);
-            }
             
-            $discountItems = $this->getRequest()->getPost('discount');
-             
-            foreach ($qtyItems as $cartItemId => $quantity) {
+            if (!$Items) {
+                throw new Exception("Item Not Selected");
+                
+            }           
+            
+            foreach ($Items as $cartItemId => $quantity) {
                 $cartItem = Mage::getModel('order/cart_item')->load($cartItemId);
-                $cartItem->quantity = $quantity;    
-                $cartItem->save();
+                $cartItem->quantity = $quantity;
+                $price = $cartItem->price;    
+                $cartItem->base_price = $price * $quantity;
+                $total[] = $cartItem->base_price;
+                $cartItem->save(); 
              }
+            if (!empty($total)) {
+                $cart->total = array_sum($total);
+                $cart->save();
+            }
+            if ($delete) {
+                $this->deleteItemAction($delete);
+            }
 
-            foreach ($discountItems as $cartItemId => $discount) {
-                $cartItem = Mage::getModel('order/cart_item')->load($cartItemId);
-               
-                if($cartItem['price']>$discount){
-                    $cartItem->discount = $discount;
-                    $cartItem->save();
-                }
-            
-             } 
              Mage::getSingleton('core/session')->addSuccess($this->__('Item Updated successfully.'));
              $this->_redirect('*/adminhtml_order/start');
-     
+            } catch (Exception $th) {
+                Mage::getModel('order/session')->addError($th);
+                $this->_redirect('*/*/start');
+
+            }
+            
     }
+
+    public function cartTotal()
+    {
+        echo "<pre>";
+        $cart =  $this->getCart();
+        $cart->getItems();
+        print_r($cart->getItems());
+        die;
+    }
+
     public function saveShippingAddressAction()
     {
         echo "<pre>";
@@ -315,29 +348,28 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
         $orderItem = Mage::getModel('order/order_item');
         $orderAddress = Mage::getModel('order/order_address');
         
-        if ($order) {
-            $this->setOrder($order);
-        } 
-        if ($orderAddress) {
-            $this->setOrderAddress();
-        } 
+       if ($order) {
+            $this->setOrder();
+        }  
         if ($orderItem) {
             $this->setOrderItem();
         }
- 
-        if ($order->load($cart->getCustomer()->getId(),'customer_id')) {
-
-           $cart->delete();
+       
+        if ($orderAddress) {
+            $this->setOrderAddress();
         }
+        
+        $cart->delete();
         Mage::getSingleton('core/session')->addSuccess($this->__('Ordered Placed Successfully'));
         $this->_redirect('*/adminhtml_order/index');
     }
 
-    public function setOrder($order)
+    public function setOrder()
     {
+        $order = Mage::getModel('order/order');
         $cart = $this->getCart();
         $customer = $cart->getCustomer();
-      
+
         $order->customer_id = $customer->getId();
         $order->customer_name = $customer->getFirstname().' '.$customer->getLastname();
         $order->customer_email = $customer->getEmail();
@@ -347,18 +379,21 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
         $order->shipping_amount = $cart->getShippingAmount();
         $order->payment_code = $cart->getPaymentMethodCode();
         $order->payment_name = $cart->getPaymentName();
+        $order->status = "Pending";
+        $order->created_at = date('Y-m-d H:i:s');
+        $order->cart_id = $cart->getId(); 
         $order->save();
     }
 
     public function setOrderItem()
     {
-        
         $cart = $this->getCart();
         $cartItem = $cart->getItems();
-        $orderId = Mage::getModel('order/order')->load($cart->getCustomerId(),'customer_id')->getOrderId();
+        $orderId = Mage::getModel('order/order')->load($cart->getCartId(),'cart_id')->getOrderId();
         foreach ($cartItem as $key => $item) {
             $cartItem = Mage::getModel('order/cart_item')->load($item['item_id']);
             $order = Mage::getModel('order/order_item');
+            
             $order->order_id = $orderId;
             $order->product_name = $item['product_name'];
             $order->product_id = $item['product_id'];
@@ -368,14 +403,16 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
             $order->discount = $item['discount']; 
             $order->created_at = date('Y-m-d H:i:s');
             $order->save();
-            $cartItem->delete();
+            print_r($order);
+            $this->deleteItemAction($item['item_id']);
         }
+        
     }
 
     public function setOrderAddress()
     {
         $cart = $this->getCart();
-        $orderId = Mage::getModel('order/order')->load($cart->getCustomerId(),'customer_id')->getOrderId();
+        $orderId = Mage::getModel('order/order')->load($cart->getCartId(),'cart_id')->getOrderId();
         
         $cartBillingAddress = $cart->getBillingAddress();
         $cartShippingAddress = $cart->getShippingAddress();
@@ -392,6 +429,20 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
             $orderAddress->zipcode = $cartBillingAddress->getZipcode();
             $orderAddress->phone = $cartBillingAddress->getPhone();
             $orderAddress->save();
+
+            if ($cartBillingAddress->same_as_billing) {
+                $orderAddress = Mage::getModel('order/order_address');
+                $orderAddress->order_id = $orderId;
+                $orderAddress->address_id = $cartBillingAddress->getAddressId();
+                $orderAddress->address = $cartBillingAddress->getAddress();
+                $orderAddress->city = $cartBillingAddress->getCity();
+                $orderAddress->address_type = 'Shipping';
+                $orderAddress->state= $cartBillingAddress->getState();
+                $orderAddress->Country = $cartBillingAddress->getCountry();
+                $orderAddress->zipcode = $cartBillingAddress->getZipcode();
+                $orderAddress->phone = $cartBillingAddress->getPhone();
+                $orderAddress->save();
+            }
 
             $cartBillingAddress->delete();
 
@@ -414,5 +465,11 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
         } 
        /*  print_r($cartBillingAddress);
         die; */
+    }
+
+    public function massDeleteAction()
+    {
+        echo 111;
+        die;
     }
 }

@@ -1,0 +1,22 @@
+<table width=100% border='1'>
+    <tr>
+        <td width=20% height="500px">
+            <table width=100% border='1'>
+                <tr>
+                    <td>
+                        <input type="text" name="search" placeholder="Search"/>
+                    </td> 
+                    <td>
+                        <input type="button" value="search">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <?php echo $this->getChildHtml('rows');?>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td width=80%>Message</td>
+    </tr>
+</table>

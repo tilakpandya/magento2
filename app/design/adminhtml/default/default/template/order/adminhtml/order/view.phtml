@@ -38,13 +38,25 @@ $total = $this->total();
         <td>
             <div class="entry-edit">
                 <div class="entry-edit-head">
-                    <h4 class="icon-head head-account">Shipping and Payment Information</h4>
+                    <h4 class="icon-head head-account">Order Information</h4>
                     <div class="tools"></div>
                 </div>
                 <div class="fieldset">
                     <div class="hor-scroll">
                         <table cellspacing="0" class="form-list">
                             <tbody>
+                                <tr>
+                                    <td class="label"><label>Status</label></td>
+                                    <td class="value">
+                                        <b><?= $customer->getStatus(); ?></b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label"><label>Date of Order</label></td>
+                                    <td class="value">
+                                        <?= $customer->getCreatedAt(); ?>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td class="label"><label>Shipping Method</label></td>
                                     <td class="value">
@@ -53,7 +65,7 @@ $total = $this->total();
                                 </tr>
                                 <tr>
                                     <td class="label"><label>Payment Method</label></td>
-                                    <td class="value"><strong><?= $customer->getPaymentName(); ?></strong></td>
+                                    <td class="value"><?= $customer->getPaymentName(); ?></td>
                                 </tr>
 
                             </tbody>
@@ -125,7 +137,7 @@ $total = $this->total();
                                         <td class="a-right">
                                             <span class="price-excl-tax">
 
-                                                <span class="price">$<?= $value['price'] ?></span>
+                                                <span class="price">$<?= $value['price'] * $value['quantity'] ?></span>
 
                                             </span>
                                             <br>

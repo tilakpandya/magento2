@@ -1,0 +1,40 @@
+<config>
+    <menu>
+      <chat module="chat">
+        <title>Chat</title>
+        <sort_chat>220</sort_chat>
+        <children>
+          <chat module="chat">
+            <title>Manage chat</title>
+            <sort_chat>0</sort_chat>
+            <action>chat/Adminhtml_Chat/</action>
+          </chat>
+        </children>
+      </chat>
+    </menu>
+    
+    <acl>
+      <resources>
+        <all>
+          <title>Allow Everything</title>
+        </all>
+        <admin>
+          <children>
+            
+            <chat translate="title" module="chat">
+                <title>chat</title>
+                <sort_chat>200</sort_chat>
+                <children>
+                  <chat translate="title">
+                    <title>Manage chat</title>
+                  </chat>
+                </children>
+            </chat>
+          </children>
+        </admin>
+      </resources>
+	 </acl>
+
+   
+       
+</config>

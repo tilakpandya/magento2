@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Ccc_Chat>
+      <active>true</active>
+      <codePool>local</codePool>
+    </Ccc_Chat>
+  </modules>
+</config>

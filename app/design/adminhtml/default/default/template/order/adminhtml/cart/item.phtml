@@ -13,7 +13,10 @@ $customerId = Mage::getSingleton('order/session')->getCustomerId();
                 <table cellspacing="0" style="border:0;" id="lastOrdersGrid_table">
                 <?php if ($customerId) : ?>
                     <colgroup>
-                        <col>
+                        <col width="100">
+                        <col width="100">
+                        <col width="100">
+                        <col width="100">
                         <col width="100">
                         <col width="100">
                     </colgroup>
@@ -24,8 +27,6 @@ $customerId = Mage::getSingleton('order/session')->getCustomerId();
                                     <th><?php echo $this->__('Price') ?></th>
                                     <th><?php echo $this->__('Quantity') ?></th>
                                     <th><?php echo $this->__('Subtotal') ?></th>
-                                    <th><?php echo $this->__('Discount') ?></th>
-                                    <th><?php echo $this->__('Row Total') ?></th>
                                     <th><?php echo $this->__('Action') ?></th>
                         </tr>
                     </thead>
@@ -37,8 +38,6 @@ $customerId = Mage::getSingleton('order/session')->getCustomerId();
                                         <td>$<?= $item['price'] ?></td>
                                         <td><input type="number" name="quantity[<?= $item['item_id'] ?>]" id="quantity" value="<?= $item['quantity'] ?>" min="1" required></td>
                                         <td>$<?= $price = $item['price'] * $item['quantity'] ?></td>
-                                        <td><input type="number" name="discount[<?= $item['item_id'] ?>]" id="discount" value="<?= $item['discount'] ?>" min="0" required></td>
-                                        <td>$<?= $price - $item['discount'] ?></td>
                                         <td><button type="submit" value="<?= $item['item_id'] ?>" name="delete">Delete</button></a></td>
                                     </tr>
                                 <?php endforeach; ?>
