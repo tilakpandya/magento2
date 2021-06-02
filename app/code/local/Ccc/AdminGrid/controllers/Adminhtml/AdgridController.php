@@ -2,6 +2,8 @@
 
 class Ccc_AdminGrid_Adminhtml_AdgridController extends Mage_Adminhtml_Controller_Action
 {
+    protected $header = [];
+    protected $data = [];
     
     protected function _isAllowed()
     {
@@ -11,10 +13,70 @@ class Ccc_AdminGrid_Adminhtml_AdgridController extends Mage_Adminhtml_Controller
 
 	public function indexAction()
     {
-       	$this->loadLayout();
+        echo "<pre>";
+       	/* $this->loadLayout();
 	    $this->_title($this->__("Admin Grid"));
         $this->_addContent($this->getLayout()->createBlock('admingrid/adminhtml_adgrid'));
-	    $this->renderLayout();
+	    $this->renderLayout(); */
+        
+         //insert Data from mysql to csv
+        $userData = $this->fetchData();
+        $file = Mage::getBaseDir().'/media/order/data2.csv';
+        $heading = [];
+        $handler = fopen($file,'w',false);
+        
+        fputcsv($handler,$heading,",");
+        foreach ($userData as $key => $data) {
+            
+            if (!$heading) {
+                foreach ($data as $key => $value) {
+                   if (!in_array($key,$heading)) {
+                       $heading[] = $key;
+                   }
+                }
+                fputcsv($handler,$heading,",");
+            }
+            $lineData = [$data['id'],$data['name'],$data['email'],$data['phone_number']];
+            fputcsv($handler,$lineData,",");
+           print_r($heading);
+            
+        }
+        die;
+
+        //insert Data from csv to mysql
+        $dataArray = 0;
+        $file = Mage::getBaseDir().'/media/order/data.csv';
+        $handler = fopen($file,'r',false);
+        
+        while($row = fgetcsv($handler,4096,',','"','\\')){
+            if (!$this->header) {
+                $this->header = $row;
+            } else {
+                $this->data[] = array_combine($this->header, $row);
+                //$this->data[] = $dataArray;
+            }
+        }
+        
+    }
+
+    public function insertRecord()
+    {
+        if (!$this->data) {
+            return false;
+        }
+        foreach ($this->data as $key => $data) { 
+           $user = Mage::getModel('admingrid/user');          
+           $user->addData($data);
+           $user->save();
+           print_r($user);  
+        }
+         
+    }
+    
+
+    public function fetchData()
+    {
+       return $user = Mage::getModel('admingrid/user')->getCollection()->getData();           
     }
 
     public function saveAction()

@@ -107,6 +107,7 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
     public function addItemToCartAction()
     {
         try {
+            echo "<pre>";
             $productItems = $this->getRequest()->getPost('id');
             $cart =  $this->getCart();
             $total = [];
@@ -132,6 +133,12 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
                 $product = $productCollection->getResource()->getReadConnection()->fetchRow($select); 
                 
                 $cartItem = Mage::getModel('order/cart_item');
+                if ($abc = $cartItem->load($product['name'],'product_name')->getProductName()){
+                    $cartItem->quantity += 1;
+                    $cartItem->base_price = $product['price'] *  $cartItem->quantity; 
+                    $cartItem->save();
+                    continue;
+                }
                 $cartItem->cart_id = $cart['cart_id'];
                 $cartItem->product_id = $product['entity_id'];
                 $cartItem->product_name = $product['name'];
@@ -255,7 +262,6 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
                 $customerShippingAddress->setCity($cartBillingAddress->city);
                 $customerShippingAddress->save();
             }
-            $this->_redirect('*/adminhtml_order/start');
         }else{
             $cartShippingAddress = $cart->getShippingAddress();
         
@@ -358,7 +364,7 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
         if ($orderAddress) {
             $this->setOrderAddress();
         }
-        
+
         $cart->delete();
         Mage::getSingleton('core/session')->addSuccess($this->__('Ordered Placed Successfully'));
         $this->_redirect('*/adminhtml_order/index');

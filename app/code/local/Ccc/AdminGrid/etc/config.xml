@@ -30,7 +30,10 @@
                 <entities>
                   <adgrid>
                     <table>admingrid_adgrid</table>
-                  </adgrid>                    
+                  </adgrid>
+                  <user>
+                    <table>user</table>
+                  </user>                    
                 </entities>
             </admingrid_resource>
     </models>
