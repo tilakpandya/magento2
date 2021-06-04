@@ -4,13 +4,34 @@ class Ccc_AdminGrid_Adminhtml_AdgridController extends Mage_Adminhtml_Controller
 {
     protected $header = [];
     protected $data = [];
+    protected $finalData = [];
+    protected $attributes =[];
     
     protected function _isAllowed()
     {
         return Mage::getSingleton('admin/session')->isAllowed('admingrid/adgrid');
     }
 
+    protected function _prepareAttributes()
+    {
+        $model = Mage::getModel('eav/entity_attribute');
+        $collection = $model->getCollection();
+        $select = $collection->getSelect();
+        $select->reset(Zend_Db_Select::COLUMNS)->columns(['attribute_code','attribute_id'])
+               ->where('entity_type_id = ?',4);
 
+        $this->attributes = $collection->getResource()->getReadConnection()->fetchPairs($select);
+        
+
+    }
+
+    public function getAttributes()
+    {
+        if (!$this->attributes) {
+            $this->_prepareAttributes();
+        }
+        return $this->attributes;
+    }
 	public function indexAction()
     {
         echo "<pre>";
@@ -18,7 +39,47 @@ class Ccc_AdminGrid_Adminhtml_AdgridController extends Mage_Adminhtml_Controller
 	    $this->_title($this->__("Admin Grid"));
         $this->_addContent($this->getLayout()->createBlock('admingrid/adminhtml_adgrid'));
 	    $this->renderLayout(); */
+        $attributes = $this->getAttributes();
+        $obj = new Varien_File_Csv();
+        $file = Mage::getBaseDir().'/media/order/data3.csv';
+        $csvData = $obj->getData($file);
+        $handler = fopen($file,'r',false);
+        foreach ($csvData as $key => $value) {
+            if (!$this->header) {
+                $this->header = $value;
+                continue;
+            }
+            $this->data[] = $value = array_combine($this->header,$value);
+
+            if (!array_key_exists($value['attribute'],$this->finalData)) {
+                $this->finalData[$value['attribute']] = [];
+                $this->finalData[$value['attribute']]['values'] = [];
+                $this->finalData[$value['attribute']]['attribute_id'] = 0; 
+
+                if (array_key_exists($value['attribute'], $attributes)) {
+                    $this->finalData[$value['attribute']]['attribute_id'] = $attributes[$value['attribute']]; 
+                }
+            }
+            $this->finalData[$value['attribute']]['values'][] = $value['option'];
+        }
         
+        if (!$this->finalData) {
+            throw new Exception("Error Processing");
+            
+        }
+
+        $model = Mage::getModel('eav/entity_setup');
+        $installer = new Mage_Eav_Model_Entity_Setup('core_setup');
+        $installer->startSetup();
+        
+        foreach ($this->finalData as $attribute => $options) {
+            $installer->addAttributeOption($options);
+
+        }
+        $installer->endSetup();
+
+        die;
+
          //insert Data from mysql to csv
         $userData = $this->fetchData();
         $file = Mage::getBaseDir().'/media/order/data2.csv';
@@ -41,10 +102,10 @@ class Ccc_AdminGrid_Adminhtml_AdgridController extends Mage_Adminhtml_Controller
            print_r($heading);
             
         }
-        die;
+        
 
         //insert Data from csv to mysql
-        $dataArray = 0;
+         $dataArray = 0;
         $file = Mage::getBaseDir().'/media/order/data.csv';
         $handler = fopen($file,'r',false);
         
@@ -55,8 +116,7 @@ class Ccc_AdminGrid_Adminhtml_AdgridController extends Mage_Adminhtml_Controller
                 $this->data[] = array_combine($this->header, $row);
                 //$this->data[] = $dataArray;
             }
-        }
-        
+        }  
     }
 
     public function insertRecord()

@@ -1,56 +1,122 @@
 <?php
-    $products = $this->getProducts();
-    $customerId = Mage::getSingleton('order/session')->getCustomerId();
-    /* echo "<pre>";
+$products = $this->getProducts();
+$customerId = Mage::getSingleton('order/session')->getCustomerId();
+/* echo "<pre>";
     print_r($this->getProducts()); 
     die; */
 ?>
-<div class="entry-edit-head" ><h4>Product</h4></div>
-    <form action="<?php echo $this->getUrl('*/adminhtml_order/addItemToCart');?>" Method="POST" id="cartForm">
-        <?php echo $this->getBlockHtml('formkey');?>
-        <fieldset class="a-center bold">
-            <span class="nowrap">
-                <center>        
-                    <table class="data-table" id="my-product-table" width="50%">
-                    <?php if($customerId):?>
+
+<form action="<?php echo $this->getUrl('*/adminhtml_order/addItemToCart'); ?>" Method="POST" id="cartForm">
+<?php echo $this->getBlockHtml('formkey');?>
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <div style="float: right;"><button type="submit" title="Save Product" style="width:150px;height:25px" id="hide">Add product to cart</button></div>
+        <h4 class="fieldset-legend head-catalog-product icon-head">Please Select Products to Add</h4>
+    </div>
+    <div class="fieldset">
+
+        <div id="sales_order_create_search_grid">
+            <table cellspacing="0" class="actions">
+                <tbody>
+                    <tr>
+                        <td class="pager">
+                            Page
+
+                            <input type="text" name="page" value="1" class="input-text page" onkeypress="sales_order_create_search_gridJsObject.inputPage(event, '1')">
+
+
+                            of 1 pages <span class="separator">|</span>
+                            View <select name="limit" onchange="sales_order_create_search_gridJsObject.loadByElement(this)">
+                                <option value="20" selected="selected">20</option>
+                                <option value="30">30</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="200">200</option>
+                            </select>
+                            
+                        </td>
+                        <td class="filter-actions a-right">
+                            <button id="id_b5a9039823180ba359da4a2739d93d3c" title="Reset Filter" type="button" class="scalable " onclick="sales_order_create_search_gridJsObject.resetFilter()" style=""><span><span><span>Reset Filter</span></span></span></button><button id="id_f1c1e00fb2c7a0f9e7948157d4414eee" title="Search" type="button" class="scalable task" onclick="sales_order_create_search_gridJsObject.doFilter()" style=""><span><span><span>Search</span></span></span></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="grid">
+                <div class="hor-scroll">
+                    <table cellspacing="0" class="data" id="sales_order_create_search_grid_table">
+                    
+                        <colgroup>
+                            <col width="60">
+                            <col>
+                            <col width="80">
+                            <col width="50">
+                        </colgroup>
                         <thead>
-                            <tr>
-                                <th><h3><?php echo $this->__('SKU') ?></h3></th>
-                                <th><h3><?php echo $this->__('Name') ?></h3></th>
-                                <th><h3><?php echo $this->__('Price') ?></h3></th>
-                                <th><h3><?php echo $this->__('Select') ?></h3></th>
+                            <tr class="headings">
+                                <th><span class="nobr"><a href="#" name="entity_id" title="asc" class="sort-arrow-desc"><span class="sort-title">ID</span></a></span></th>
+                                <th><span class="nobr"><a href="#" name="name" title="asc" class="not-sort"><span class="sort-title">Product Name</span></a></span></th>
+                                <th><span class="nobr"><a href="#" name="sku" title="asc" class="not-sort"><span class="sort-title">SKU</span></a></span></th>
+                                <th><span class="nobr"><a href="#" name="price" title="asc" class="not-sort"><span class="sort-title">Price</span></a></span></th>
+                                <th><span class="nobr"><a href="#" name="Check" title="asc" class="not-sort"><span class="sort-title">Check</span></a></span></th>
+
+                            </tr>
+                            <?php if ($customerId) : ?>
+                            <tr class="filter">
+                                <th>
+                                    <div class="field-100"><input type="text" name="entity_id" id="sales_order_create_search_grid_filter_entity_id" value="" class="input-text no-changes"></div>
+                                </th>
+                                <th>
+                                    <div class="field-100"><input type="text" name="name" id="sales_order_create_search_grid_filter_name" value="" class="input-text no-changes"></div>
+                                </th>
+                                <th>
+                                    <div class="field-100"><input type="text" name="sku" id="sales_order_create_search_grid_filter_sku" value="" class="input-text no-changes"></div>
+                                </th>
+                                <th>
+                                    <div class="field-100"><input type="text" name="check" id="sales_order_create_search_grid_filter_sku" value="" class="input-text no-changes"></div>
+                                </th>
+                                <th>
+                                    
+                                </th>
+                                
                             </tr>
                         </thead>
+
                         <tbody>
-                            <?php foreach ($products as $product): ?>
-                            <tr>
-                                <td><?php echo $product['sku']; ?>&nbsp;</td>
-                                <td><?php echo $product['name']; ?>&nbsp;</td>
-                                <td><?php echo $product['price']; ?></td>
-                                <td><input type="checkbox" id="myCheckbox" name="id[<?php echo $product['entity_id']; ?>]" ></td>
+                        <?php foreach ($products as $product) : ?>
+                            <tr title="#" class="even pointer">
+
+                                <td class=" "><?php echo $product['entity_id']; ?></td>
+
+                                <td class=" "><?php echo $product['name']; ?></td>
+
+                                <td class="a-center price a-right "><?php echo $product['sku']; ?></td>
+                                <td class="a-center price a-right ">$<?php echo $product['price']; ?></td>
+                                <td class="a-center ">
+                                  <input type="checkbox" id="myCheckbox" name="id[<?php echo $product['entity_id']; ?>]">
+                                </td>
+
                             </tr>
-                            <?php endforeach;?>
-                            <?php else:?>
+                            <?php endforeach; ?>
+                            <?php else : ?>
                             <tr>
                                 <td>Please Select Customer...</td>
-        
+
                             </tr>
-                            <?php endif;?>
+                        <?php endif; ?>
+
                         </tbody>
+
                     </table>
-                <center>   
-            </span><br>
-            <?php if($customerId):?>
-                <button type="submit" title="Save Product" style="width:100px;height:25px" id="hide">Save</button>
-            <?php endif;?>     
-        </fieldset>
-    </form>    
+                </div>
+            </div>
+        </div>
 
-
+    </div>
+</div>
+</form>
 <script language="javascript">
-    function enableDisable(bEnable, textBoxID)
-    {
-         document.getElementById(textBoxID).disabled = !bEnable
-        
+    function enableDisable(bEnable, textBoxID) {
+        document.getElementById(textBoxID).disabled = !bEnable
+
     }
 </script>

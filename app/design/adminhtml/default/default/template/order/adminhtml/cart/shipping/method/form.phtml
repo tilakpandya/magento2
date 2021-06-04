@@ -1,27 +1,35 @@
 <?php
-    $rates = $this->getShippingMethod();
-    //$cartShippingMethod = $this->getCart()->getShippingMethodCode();
+$rates = $this->getShippingMethod();
+//$cartShippingMethod = $this->getCart()->getShippingMethodCode();
 
 ?>
-<form action="<?php echo $this->getUrl('*/adminhtml_order/saveShippingMethod/');?>" Method="POST" id="cartForm">
-<?php echo $this->getBlockHtml('formkey');?>
-<table width="20%" heigth=20%>
 
-        <?php foreach ($rates as $carrier):?>
-            <?php foreach ($carrier as $rate):?>
-                <tr>
-                    <td><?=$rate->getData()['carrier_title']?></td>
-                    <td>$ <?= $rate->getData()['price']?></td>
-                    <td><input type="radio" value="<?=$rate->getData()['code']?>=><?=$rate->getData()['price']?>=><?=$rate->getData()['carrier_title']?>" 
-                        name="shippingMethod" <?php //if($rate->getData()['code'] == $this->getCart()->shipping_method_code){echo "Checked";}?> required>
-                    
-                    </td>
-                </tr>
+<form action="<?php echo $this->getUrl('*/adminhtml_order/saveShippingMethod/'); ?>" Method="POST" id="cartForm">
+    <?php echo $this->getBlockHtml('formkey'); ?>
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <div style="float: right;"></div>
+        <h4 class="fieldset-legend head-payment-method icon-head">Payment Method</h4>
+    </div>
+    <div class="fieldset">
+        <div id="order-billing_method_form">
+            <dl class="payment-methods">
+                <?php foreach ($rates as $carrier) : ?>
+                    <?php foreach ($carrier as $rate) : ?>
                 
-            <?php endforeach;?>       
-        <?php endforeach;?> 
-        <tr>
-                <td colspan=3><button type="submit" style="width:100px;height:25px">Submit</button> </td>
-        </tr> 
-    </table>  
-</form>    
+                        <dt>
+                            <input id="p_method_cod" value="<?= $rate->getData()['code'] ?>=><?= $rate->getData()['price'] ?>=><?= $rate->getData()['carrier_title'] ?>" type="radio" name="payment[method]" title="<?= $rate->getData()['carrier_title'] ?>" 
+                            onclick="payment.switchMethod('<?= $rate->getData()['carrier_title'] ?>')" class="validate-one-required-by-name"name="shippingMethod" 
+                            <?php //if($rate->getData()['code'] == $this->getCart()->shipping_method_code){echo "Checked";} ?> required>
+                            <label for="p_method_cod"><b>$ <?= $rate->getData()['price'] ?></b></label>
+                            <label for="p_method_cod"><?=$rate->getData()['carrier_title']?></label>
+                        </dt>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+                        <dt><button type="submit" style="width:100px;height:25px">Submit</button> </dt>
+            </dl>
+        </div>
+
+    </div>
+</div>
+</form>

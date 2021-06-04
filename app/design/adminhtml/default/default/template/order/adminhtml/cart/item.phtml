@@ -13,12 +13,12 @@ $customerId = Mage::getSingleton('order/session')->getCustomerId();
                 <table cellspacing="0" style="border:0;" id="lastOrdersGrid_table">
                 <?php if ($customerId) : ?>
                     <colgroup>
-                        <col width="100">
-                        <col width="100">
-                        <col width="100">
-                        <col width="100">
-                        <col width="100">
-                        <col width="100">
+                        <col width="80">
+                        <col width="80">
+                        <col width="80">
+                        <col width="80">
+                        <col width="80">
+                        <col width="80">
                     </colgroup>
                     <thead>
                         <tr class="headings">
@@ -49,6 +49,7 @@ $customerId = Mage::getSingleton('order/session')->getCustomerId();
                             </tbody>
                     </tbody>
                 </table>
+                <br>
                 <center>
                     <?php if ($customerId) : ?>
                         <button type="submit" title="update cart" style="width:130px;height:25px">Update cart</button>

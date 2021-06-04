@@ -1,127 +1,101 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<?php 
-    $customerId = Mage::getSingleton('order/session')->getCustomerId();
-    $cart = $this->getCart();
-     
- ?>
-    <?php echo $this->getBlockHtml('formkey');?>
-    
-    <div class="entry-edit">
-        <?php echo $this->getChildHtml('customer_list'); ?>
-    </div>
+<?php
+$customerId = Mage::getSingleton('order/session')->getCustomerId();
+$cart = $this->getCart();
 
-    <div class="entry-edit" id="myDiv" hidden>
-        <?php echo $this->getChildHtml('product'); ?>  
-    </div>
+?>
+<?php echo $this->getBlockHtml('formkey'); ?>
 
-    <div class="entry-edit">
-        <?php echo $this->getChildHtml('items'); ?>
-    </div>
+<div class="entry-edit">
+    <?php echo $this->getChildHtml('customer_list'); ?>
+</div>
 
-    <div class="entry-edit">
-        <div class="entry-edit-head"><h4>customer Address</h4></div>
-            <fieldset class="a-center bold">
-            <span class="nowrap">
-            <center> 
-            <table width="60%" class="table-class">
-            <?php if($customerId):?>
-           
-                
-                    <tr>
-                        <th><h2>Billing Address</h2></th>
-                        <th><h2>Shipping Address</h2></th>
-                    </tr>
-                    <tr>
-                        <td><?php echo $this->getChild('billing_Address')->setCart($cart)->toHtml(); ?></td>
-                        <td><?php echo $this->getChild('shipping_Address')->setCart($cart)->toHtml(); ?></td>
+<div class="entry-edit" id="myDiv" hidden>
+    <?php echo $this->getChildHtml('product'); ?>
+</div>
 
-                    </tr>
-                
-               
-            <?php else:?>
-                    <tr>
-                            <td>Please Select Customer...</td>
-                    </tr>
-            <?php endif;?> 
-            </table> 
-            </center> 
-            </span>
-        </fieldset>
-    </div>
+<div class="entry-edit">
+    <?php echo $this->getChildHtml('items'); ?>
+</div>
 
-    <div class="entry-edit">
-        <div class="entry-edit-head"><h4>Payment Shippment Methods</h4></div>
-            <fieldset class="a-center bold">
-            <span class="nowrap">
-            <center> 
-            <table width="70%" class="table-class">
-                <?php if($this->getCart()->getBillingAddress()->getId()):?>
-                    <?php if($this->getCart()->getShippingAddress()->getId()):?>
-                        <tr>
-                            <th><h2>Shipping Method</h2></th>
-                            <th><h2>Billing Method</h2></th>
-                        </tr>
-                        <tr>
-                            <td>                            
-                                <?php echo $this->getChild('shipping_method')->setCart($cart)->toHtml(); ?>
-                            </td>
-                            <td>
-                                <?php echo $this->getChild('billing_method')->setCart($cart)->toHtml(); ?>
-                            </td>
-                        </tr>
-                    <?php endif;?> 
-                    <?php if($this->getCart()->getBillingAddress()->getSameAsBilling()):?>
-                        <tr>
-                            <th><h2>Shipping Method</h2></th>
-                            <th><h2>Billing Method</h2></th>
-                        </tr>
-                        <tr>
-                            <td>                            
-                                <?php echo $this->getChildHtml('shipping_method') ?>
-                            </td>
-                            <td>
-                                <?php echo $this->getChildHtml('billing_method') ?>
-                            </td>
-                        </tr> 
-                    <?php endif;?> 
-                <?php else:?>
-                        <tr>
-                                <td>Please Select or Fill and Submit Above Information...</td>
-                        </tr>
-                <?php endif;?> 
-            </table> 
-            </center>
-            </span>
-        </fieldset>
-    </div>
 
-    <div class="entry-edit">
-        <?php echo $this->getChild('total')->setCart($cart)->toHtml(); ?>
-    </div>
+<table>
+    <?php if ($customerId) : ?>
+        <tr>
+            <td><?php echo $this->getChild('billing_Address')->setCart($cart)->toHtml(); ?></td>
+            <td><?php echo $this->getChild('shipping_Address')->setCart($cart)->toHtml(); ?></td>
+        </tr>
+    <?php else : ?>
+        <tr>
+            <td>Please Select Customer...</td>
+        </tr>
+    <?php endif; ?>
+</table>
 
-    <script>
-        function myCheckbox() {
-            var sameasbilling = document.getElementById("sameasbilling");
-            if (sameasbilling.checked == true) {
-                document.getElementById("shippingAddress").disabled = true;
-                document.getElementById("shippingCity").disabled = true;
-                document.getElementById("shippingState").disabled = true;
-                document.getElementById("shippingZipcode").disabled = true;
-                document.getElementById("shippingCountry").disabled = true;
-                document.getElementById("shippingPhone").disabled = true;
+<table width="100%" class="table-class">
+    <?php if ($this->getCart()->getBillingAddress()->getId()) : ?>
+        <?php if ($this->getCart()->getShippingAddress()->getId()) : ?>
+            <tr>
+                <td>
+                    <?php echo $this->getChild('shipping_method')->setCart($cart)->toHtml(); ?>
+                </td>
+                <td>
+                    <?php echo $this->getChild('billing_method')->setCart($cart)->toHtml(); ?>
+                </td>
+            </tr>
+        <?php endif; ?>
+        <?php if ($this->getCart()->getBillingAddress()->getSameAsBilling()) : ?>
+            <tr>
+                <td>
+                    <?php echo $this->getChildHtml('shipping_method') ?>
+                </td>
+                <td>
+                    <?php echo $this->getChildHtml('billing_method') ?>
+                </td>
+            </tr>
+        <?php endif; ?>
+    <?php else : ?>
+        <tr>
+            <td>Please Select or Fill and Submit Above Information...</td>
+        </tr>
+    <?php endif; ?>
+</table>
+</center>
+</span>
 
-            }else{
-                document.getElementById("shippingAddress").disabled = false;
-                document.getElementById("shippingCity").disabled = false;
-                document.getElementById("shippingState").disabled = false;
-                document.getElementById("shippingZipcode").disabled = false;
-                document.getElementById("shippingCountry").disabled = false; 
-                document.getElementById("shippingPhone").disabled = false;
 
-            }
+<div class="entry-edit">
+    <?php echo $this->getChild('total')->setCart($cart)->toHtml(); ?>
+</div>
+
+<script>
+    function myCheckbox() {
+        var sameasbilling = document.getElementById("sameasbilling");
+        var address = document.getElementById("billingaddress");
+        var city = document.getElementById("billingcity");
+        var state = document.getElementById("billingstate");
+        var zipcode = document.getElementById("billingzipcode");
+        var country = document.getElementById("billingcountry");
+        var phone = document.getElementById("billingphone");
+
+        if (sameasbilling.checked == true) {
+            document.getElementById("shippingAddress").disabled = true;
+            document.getElementById("shippingCity").disabled = true;
+            document.getElementById("shippingState").disabled = true;
+            document.getElementById("shippingZipcode").disabled = true;
+            document.getElementById("shippingCountry").disabled = true;
+            document.getElementById("shippingPhone").disabled = true;
+
+        } else {
+            document.getElementById("shippingAddress").disabled = false;
+            document.getElementById("shippingCity").disabled = false;
+            document.getElementById("shippingState").disabled = false;
+            document.getElementById("shippingZipcode").disabled = false;
+            document.getElementById("shippingCountry").disabled = false;
+            document.getElementById("shippingPhone").disabled = false;
+
         }
 
 
-</script>     
-                     
-
+    }
+</script>

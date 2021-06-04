@@ -1,0 +1,12 @@
+index,attribute,option,sort_order,default
+1,color,white,1,yes
+2,color,red,2,no
+3,color,pink,3,no
+4,color,blue,4,no
+5,size,S,1,yes
+6,size,M,2,no
+7,size,X,3,no
+8,size,XL,4,no
+9,design,simple,1,yes
+10,design,simple2,2,no
+11,design,simple3,3,no
